@@ -47,7 +47,7 @@ const { url_helper, html_helper } = require('../mmi-lambdas/mmi_modules');
 
         const _h = new html_helper(html, _baseUrl, true, true, sFilters, aFilters)
 
-        const _links = await _h.ALL_LINKS()
+        // const _links = await _h.ALL_LINKS()
 
         const _sections = await _h.SECTION_LINKS()
 

@@ -1,8 +1,9 @@
 const { $useragent, $request, $cloudscraper } = require('../npm_mods')
 
 class UrlHelper {
-    constructor(_url){
+    constructor(_url, _request_source){
         this._url = _url
+        this._request_source = _request_source
     }
 }
 
@@ -27,22 +28,22 @@ UrlHelper.prototype.RELATIVE_PATH = async function(){
     return r_path
 }
 
-UrlHelper.prototype.MAKE_REQUEST = async function(url, request_source){
+UrlHelper.prototype.MAKE_REQUEST = async function(){
     const headers = {
         'User-Agent': await this.USER_AGENT()
     }
-    console.log(headers)
+    // console.log(headers)
     const promise = new Promise((resolve, reject) => {
         try{
-            if(request_source === 'cloudscraper'){
-                $cloudscraper.get(encodeURI(url), {headers: headers}, function(error, response, body){
+            if(this._request_source === 'cloudscraper'){
+                $cloudscraper.get(encodeURI(this._url), {headers: headers}, function(error, response, body){
                     // console.log(error, body)
                     if(error) reject(error);
                     else if(!body && !error) reject('Something is wrong with the website.');
                     else resolve(body);
                 })
             }else{
-                $request.get(encodeURI(url), {headers: headers}, function(error, response, body){
+                $request.get(encodeURI(this._url), {headers: headers}, function(error, response, body){
                     // console.log(error, body)
                     if(error) reject(error);
                     else if(!body && !error) reject('Something is wrong with the website.');

@@ -4,5 +4,8 @@ module.exports = {
     '$cheerio': require('cheerio'),
     '$useragent': require('user-agents'),
     '$url': require('url').parse,
-    '$path': require('path')
+    '$path': require('path'),
+    '$string': require('string'),
+    '$moment': require('moment'),
+    '$stripcomments': require('strip-html-comments')
 }
