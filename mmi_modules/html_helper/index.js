@@ -46,12 +46,21 @@ HtmlHelper.prototype.ALL_LINKS = async function(){
 
             let rawLinks = mapHttp.concat(mapIncludeHttp)
 
-            let formatLinks = rawLinks.map( v => {
-                let vUrl = v
-                vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
-                vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
-                return new URL(vUrl).href
-            }).filter(v=>{
+            // let formatLinks = rawLinks.map( v => {
+            //     let vUrl = v
+            //     vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
+            //     vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+            //     return new URL(vUrl).href
+            // }).filter(v=>{
+            //     return !v.includes('facebook.com') && !v.includes('twitter.com') && !v.includes('youtube.com')
+            //     && !v.includes('instagram.com') && !v.includes('pinterest.com') && !v.includes('google.com') 
+            //     && !v.includes('bit.ly') && !v.includes('/cdn-cgi/') && !v.includes('.jpg') && !v.includes('.jpeg')
+            //     && !v.includes('.mpeg') && !v.includes('.png') && !v.includes('.gif') && !v.includes('.pdf') && !v.includes('.doc')
+            //     && !v.includes('.xls') && !v.includes('.mp3') && !v.includes('.mp4') && !v.includes('.wav') && !v.includes('.flac')
+            //     && !v.includes('.ogg') && !v.includes('.txt')
+            // })
+
+            let formatLinks = rawLinks.filter(v=>{
                 return !v.includes('facebook.com') && !v.includes('twitter.com') && !v.includes('youtube.com')
                 && !v.includes('instagram.com') && !v.includes('pinterest.com') && !v.includes('google.com') 
                 && !v.includes('bit.ly') && !v.includes('/cdn-cgi/') && !v.includes('.jpg') && !v.includes('.jpeg')
@@ -93,6 +102,11 @@ HtmlHelper.prototype.SECTION_LINKS = async function() {
                 }else{
                     return v
                 }
+            }).map( v => {
+                let vUrl = v
+                vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
+                vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+                return new URL(vUrl).href
             })
             resolve(filteredSections)
         }catch(e){
@@ -125,6 +139,11 @@ HtmlHelper.prototype.ARTICLE_LINKS = async function() {
                 }else{
                     return v
                 }
+            }).map( v => {
+                let vUrl = v
+                vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
+                vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+                return new URL(vUrl).href
             })
             resolve(filteredSections)
         }catch(e){

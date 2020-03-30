@@ -14,7 +14,7 @@ const { url_helper, html_helper } = require('../mmi-lambdas/mmi_modules');
     
     let aFilters = {
         includes: [
-            '\\/(\\\d+)\\/'
+            '(malaya\\.com\\.ph)\\/(.+)\\/(.+)\\/'
         ],
         excludes: [
             '\\/page-one-single\\/'
@@ -45,7 +45,7 @@ const { url_helper, html_helper } = require('../mmi-lambdas/mmi_modules');
 
         const html = await _u.MAKE_REQUEST(url, 'cloudscraper')
 
-        const _h = new html_helper(html, _baseUrl, false, true, sFilters, aFilters)
+        const _h = new html_helper(html, _baseUrl, true, true, sFilters, aFilters)
 
         const _links = await _h.ALL_LINKS()
 
