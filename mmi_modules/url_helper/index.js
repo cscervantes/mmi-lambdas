@@ -31,6 +31,7 @@ UrlHelper.prototype.MAKE_REQUEST = async function(url, request_source){
     const headers = {
         'User-Agent': await this.USER_AGENT()
     }
+    console.log(headers)
     const promise = new Promise((resolve, reject) => {
         try{
             if(request_source === 'cloudscraper'){
