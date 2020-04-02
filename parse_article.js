@@ -68,10 +68,13 @@ const parse = async function(){
         ]
     }
     try {
-        const _uri = ( process.argv[2] ) ? process.argv[2] : Error('Missing Url') 
-
+        let _uri = process.argv[2]
+        if(!_uri){
+            throw new Error('Missing Url')
+        }
         const _url = new url_helper(_uri)
         const _request = await _url.MAKE_REQUEST()
+        const url = await _url.FORMATTED_URL()
 
         const _html = new html_helper(_request)
         const _parse = await _html.HTML()
@@ -85,7 +88,7 @@ const parse = async function(){
         const text = await _article.ARTICLE_TEXT()
         const image = await _article.ARTICLE_IMAGE()
         const video = await _article.ARTICLE_VIDEO()
-        return  {title, date, author, section, html, text, image, video}
+        return  {url, title, date, author, section, html, text, image, video}
     } catch (error) {
         return error
     }

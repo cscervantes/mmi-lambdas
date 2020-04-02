@@ -8,7 +8,10 @@ class UrlHelper {
 }
 
 UrlHelper.prototype.FORMATTED_URL = async function(startWithHttp, endsWithSlash) {
-    return this._url
+    let vUrl = this._url
+    vUrl = (startWithHttp) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
+    vUrl = (endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+    return new URL(vUrl).href
 }
 
 UrlHelper.prototype.FQDN = async function() {
