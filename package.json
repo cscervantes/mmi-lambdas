@@ -4,7 +4,8 @@
   "description": "lambdas functions",
   "main": "lambda.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lambda-server": "DEBUG=mmi-lambdas:* node ./lambda-server/serve"
   },
   "keywords": [
     "lambdas"
@@ -14,7 +15,11 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "cloudscraper": "^4.6.0",
+    "debug": "^4.1.1",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
     "moment": "^2.24.0",
+    "morgan": "^1.10.0",
     "request": "^2.88.2",
     "string": "^3.3.3",
     "strip-html-comments": "^1.0.0",

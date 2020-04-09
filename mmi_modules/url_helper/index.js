@@ -25,10 +25,7 @@ UrlHelper.prototype.USER_AGENT = async function(){
 
 UrlHelper.prototype.RELATIVE_PATH = async function(){
     const url = new URL(this._url)
-    const protocol = url.protocol
-    const path = url.hostname
-    const r_path = `${protocol}//${path}`
-    return r_path
+    return url.origin
 }
 
 UrlHelper.prototype.MAKE_REQUEST = async function(){
