@@ -5,7 +5,7 @@
   "main": "lambda.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lambda-server": "DEBUG=mmi-lambdas:* node ./lambda-server/serve"
+    "dev": "DEBUG=mmi-lambdas:* node ./lambda-server/serve"
   },
   "keywords": [
     "lambdas"
