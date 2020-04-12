@@ -40,7 +40,7 @@ module.exports = function(name, router){
     router.post(name+'/new_website', async function(req, res, next){
         
         try {
-            console.log(req.body)
+            
             const _req_url = req.body.url
 
             const request_source = req.body.request_source
