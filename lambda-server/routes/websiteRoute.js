@@ -64,8 +64,10 @@ module.exports = function(name, router){
             let icos = $('link').filter((i,e)=>{
                return $(e).attr('href').search(/\.ico$/gi) != -1 || $(e).attr('href').search(/icon/gi) != -1
             }).get()
+
+            const base = $('base').attr('href')
             
-            const fav_icon = icos.map(v=>$(v).attr('href')).slice(-1)[0]
+            const fav_icon = icos.map(v=>base+$(v).attr('href')).slice(-1)[0]
 
             const title = ($('title').length > 0) ? $('title').text() : $('meta[property="og:title"]').attr('content')
 
