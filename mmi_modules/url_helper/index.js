@@ -4,8 +4,8 @@ class UrlHelper {
     constructor(_url, _request_source, startWithHttp, endsWithSlash){
         this._url = _url
         this._request_source = _request_source
-        this._startWithHttp = startWithHttp
-        this._endsWithSlash = endsWithSlash
+        this._startWithHttp = JSON.parse(startWithHttp)
+        this._endsWithSlash = JSON.parse(endsWithSlash)
     }
 }
 

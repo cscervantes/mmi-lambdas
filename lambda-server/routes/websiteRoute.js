@@ -89,4 +89,42 @@ module.exports = function(name, router){
             next(createError(error))
         }
     })
+
+    router.post(name+'/test_filters', async function(req, res, next){
+        try {
+            
+            const _req_url = req.body.url
+
+            const request_source = req.body.request_source
+
+            const home_url = req.body.website_url
+            
+            const startHttps = req.body.needs_https
+
+            const endSlash = req.body.needs_endslash
+
+            const section_filters = req.body.section_filters
+
+            const article_filters = req.body.article_filters
+            
+            const _uri = new url_helper(_req_url, request_source, startHttps, endSlash)
+
+            const _uri_response = await _uri.MAKE_REQUEST()
+
+            const url = await _uri.FORMATTED_URL()
+
+            const _htm = new html_helper(_uri_response, home_url, startHttps, endSlash, section_filters, article_filters)
+
+            const articles = await _htm.ARTICLE_LINKS()
+
+            const sections = await _htm.SECTION_LINKS()
+
+            const data = {url, articles, sections}
+
+            res.status(200).send(data)
+
+        } catch (error) {
+            res.status(500).send(error.stack)
+        }
+    })
 }

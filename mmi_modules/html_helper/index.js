@@ -4,8 +4,8 @@ class HtmlHelper {
     constructor(_html, _baseUrl, _startWithHttps, _endsWithSlash, _sectionFilters, _articleFilters){
         this._html = _html //string
         this._baseUrl = _baseUrl // string
-        this._startWithHttps = Boolean(_startWithHttps) // boolean
-        this._endsWithSlash = Boolean(_endsWithSlash) // boolean
+        this._startWithHttps = JSON.parse(_startWithHttps) // boolean
+        this._endsWithSlash = JSON.parse(_endsWithSlash) // boolean
         this._sectionFilters = _sectionFilters // array object
         this._articleFilters = _articleFilters // array object
     }
