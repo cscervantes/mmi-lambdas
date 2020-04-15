@@ -62,12 +62,12 @@ module.exports = function(name, router){
             let $ = await _htm.HTML()
 
             let icos = $('link').filter((i,e)=>{
-               return $(e).attr('href').search(/\.ico$/gi) != -1 || $(e).attr('href').search(/icon/gi) != -1
+               return $(e).attr('href').search(/\.ico$/gi) != -1 || $(e).attr('href').search(/icon/gi) != -1 || $(e).attr('href').search(/ico/gi) != -1
             }).get()
 
-            const base = $('base').attr('href')
+            const base = $('base').attr('href') || _uri_origin
             
-            const fav_icon = icos.map(v=>base+$(v).attr('href')).slice(-1)[0]
+            const fav_icon = icos.map(v=>base+$(v).attr('href')).slice(0)[0]
 
             const title = ($('title').length > 0) ? $('title').text() : $('meta[property="og:title"]').attr('content')
 
