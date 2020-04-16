@@ -1,5 +1,4 @@
-const { $cheerio, $string, $stripcomments } = require('../npm_mods')
-
+const { $cheerio, $string, $stripcomments, $pretty } = require('../npm_mods')
 class ArticleHelper {
     constructor(html, selectors){
         this._html = html // loaded from cheerio
@@ -172,7 +171,7 @@ ArticleHelper.prototype.ARTICLE_TEXT = async function(){
     const title = await this.ARTICLE_TITLE()
     const p = new Promise((resolve, reject) => {
         try {
-            let text = $cheerio.load(html, {decodeEntities:true})
+            let text = $cheerio.load($pretty(html, {ocd:true}), {decodeEntities:true})
             text = $string(text.text()).stripTags().s
             text = $string(text).collapseWhitespace().s
             if(text){

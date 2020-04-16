@@ -7,5 +7,6 @@ module.exports = {
     '$path': require('path'),
     '$string': require('string'),
     '$moment': require('moment'),
-    '$stripcomments': require('strip-html-comments')
+    '$stripcomments': require('strip-html-comments'),
+    '$pretty': require('pretty')
 }

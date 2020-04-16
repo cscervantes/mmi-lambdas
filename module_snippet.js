@@ -28,6 +28,7 @@ Article.prototype.ARTICLE_TITLE = async function(){
     const p = new Promise(async (resolve, reject) => {
         try{
             // insert your code here
+            resolve('Title here')
         }catch(error){
             reject(error)
         }
@@ -40,6 +41,7 @@ Article.prototype.ARTICLE_PUBLISH = async function(){
     const p = new Promise(async (resolve, reject) => {
         try{
             // insert your code here
+            resolve('Date here')
         }catch(error){
             reject(error)
         }
@@ -52,6 +54,7 @@ Article.prototype.ARTICLE_AUTHOR = async function(){
     const p = new Promise(async (resolve, reject) => {
         try{
             // insert your code here
+            resolve('Author here')
         }catch(error){
             reject(error)
         }
@@ -64,6 +67,7 @@ Article.prototype.ARTICLE_SECTION = async function(){
     const p = new Promise(async (resolve, reject) => {
         try{
             // insert your code here
+            resolve('Section Here')
         }catch(error){
             reject(error)
         }
@@ -76,6 +80,7 @@ Article.prototype.ARTICLE_HTML = async function(){
     const p = new Promise(async (resolve, reject) => {
         try{
             // insert your code here
+            resolve('HTML here')
         }catch(error){
             reject(error)
         }
@@ -88,6 +93,7 @@ Article.prototype.ARTICLE_TEXT = async function(){
     const p = new Promise(async (resolve, reject) => {
         try{
             // insert your code here
+            resolve('Text here')
         }catch(error){
             reject(error)
         }
@@ -100,6 +106,7 @@ Article.prototype.ARTICLE_IMAGE = async function(){
     const p = new Promise(async (resolve, reject) => {
         try{
             // insert your code here
+            resolve('Image here')
         }catch(error){
             reject(error)
         }
@@ -112,6 +119,7 @@ Article.prototype.ARTICLE_VIDEO = async function(){
     const p = new Promise(async (resolve, reject) => {
         try{
             // insert your code here
+            resolve('Video here')
         }catch(error){
             reject(error)
         }

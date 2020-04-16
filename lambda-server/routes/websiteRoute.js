@@ -1,6 +1,6 @@
 var createError = require('http-errors')
-const { url_helper, html_helper, alexa_helper, country_language_helper } = require('../../mmi_modules')
-
+const { url_helper, html_helper, alexa_helper, country_language_helper, article_helper } = require('../../mmi_modules')
+const { $string, $moment } = require('../../mmi_modules/npm_mods')
 
 module.exports = function(name, router){
     
@@ -20,20 +20,21 @@ module.exports = function(name, router){
 
             const _request_source = req.body.request_source
             
-            const _uri = new url_helper(_req_url, _request_source)
+            const _uri = new url_helper(_req_url, _request_source, false, false)
 
             const _uri_response = await _uri.MAKE_REQUEST()
 
             const _uri_origin = await _uri.RELATIVE_PATH()
 
-            const _htm = new html_helper(_uri_response, _uri_origin)
+            const _htm = new html_helper(_uri_response, _uri_origin, false, false)
 
             const urls = await _htm.ALL_LINKS()
 
             res.status(200).send(urls)
 
         } catch (error) {
-            next(createError(error))
+            // next(createError(error))
+            next(error)
         }
     })
 
@@ -45,7 +46,7 @@ module.exports = function(name, router){
 
             const request_source = req.body.request_source
             
-            const _uri = new url_helper(_req_url, request_source)
+            const _uri = new url_helper(_req_url, request_source, false, false)
 
             const _uri_response = await _uri.MAKE_REQUEST()
 
@@ -57,7 +58,7 @@ module.exports = function(name, router){
 
             const url = await _uri.FORMATTED_URL()
 
-            const _htm = new html_helper(_uri_response, _uri_origin)
+            const _htm = new html_helper(_uri_response, _uri_origin, false, false)
 
             let $ = await _htm.HTML()
 
@@ -86,7 +87,12 @@ module.exports = function(name, router){
             res.status(200).send(data)
 
         } catch (error) {
-            next(createError(error))
+            // if(error.hasOwnProperty('stack')){
+            //     res.status(500).send(error.stack)
+            // }else{
+            //     res.status(500).send(error)
+            // }
+            next(error)
         }
     })
 
@@ -124,7 +130,108 @@ module.exports = function(name, router){
             res.status(200).send(data)
 
         } catch (error) {
-            res.status(500).send(error.stack)
+            // if(error.hasOwnProperty('stack')){
+            //     res.status(500).send(error.stack)
+            // }else{
+            //     res.status(500).send(error)
+            // }
+            next(error)
+        }
+    })
+
+    router.post(name+'/test_article', async function(req, res, next){
+        try {
+            
+            const _req_url = req.body.url
+
+            const request_source = req.body.request_source
+
+            const home_url = req.body.website_url
+            
+            const startHttps = req.body.needs_https
+
+            const endSlash = req.body.needs_endslash
+
+            const selectors = req.body.selectors
+
+            const code = req.body.code_snippet
+
+            const is_using_selectors = JSON.parse(req.body.is_using_selectors)
+
+            const is_using_snippets = JSON.parse(req.body.is_using_snippets)
+
+            const _uri = new url_helper(_req_url, request_source, startHttps, endSlash)
+
+            const _uri_response = await _uri.MAKE_REQUEST()
+
+            const url = await _uri.FORMATTED_URL()
+
+            const _htm = new html_helper(_uri_response, home_url, startHttps, endSlash)
+
+            const _raw_html = await _htm.HTML()
+
+            if(is_using_selectors){
+
+                const _article = new article_helper(_raw_html, selectors)
+
+                const title = await _article.ARTICLE_TITLE()
+
+                const date = await _article.ARTICLE_PUBLISH()
+
+                const author = await _article.ARTICLE_AUTHOR()
+
+                const section = await _article.ARTICLE_SECTION()
+
+                const html = await _article.ARTICLE_HTML()
+
+                const text = await _article.ARTICLE_TEXT()
+
+                const image = await _article.ARTICLE_IMAGE()
+
+                const video = await _article.ARTICLE_VIDEO()
+
+                const data = {url, title, date, author, section, html, text, image, video}
+
+                res.status(200).send(data)
+
+            }else if(is_using_snippets){
+
+                const Snippet = module.exports = Function(code)()
+
+                const _article = new Snippet(_raw_html, $string, $moment)
+
+                const title = await _article.ARTICLE_TITLE()
+
+                const date = await _article.ARTICLE_PUBLISH()
+
+                const author = await _article.ARTICLE_AUTHOR()
+
+                const section = await _article.ARTICLE_SECTION()
+
+                const html = await _article.ARTICLE_HTML()
+
+                const text = await _article.ARTICLE_TEXT()
+
+                const image = await _article.ARTICLE_IMAGE()
+
+                const video = await _article.ARTICLE_VIDEO()
+
+                const data = {url, title, date, author, section, html, text, image, video}
+
+                res.status(200).send(data)
+            }else{
+                next('Selectors and Snippets are not configured!')
+            }
+
+
+        } catch (error) {
+            // if(error.hasOwnProperty('stack')){
+            //     res.status(500).send(error.stack)
+            // }else{
+            //     res.status(500).send(error)
+            // }
+            next(error)
+            
         }
     })
 }
