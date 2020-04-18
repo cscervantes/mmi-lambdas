@@ -1,10 +1,142 @@
 var createError = require('http-errors')
+const { url_helper, html_helper, alexa_helper, country_language_helper, article_helper, media_value_helper, transaction_helper} = require('../../mmi_modules')
+const { $string, $moment } = require('../../mmi_modules/npm_mods')
 
 
 module.exports = function(name, router){
 
     router.get(name, function(req, res, next){
         res.status(200).send('Article lambda endpoint.')
+    })
+
+    router.post(name+'/test_article', async function(req, res, next){
+        try {
+            
+            const _req_url = req.body.url
+
+            const request_source = req.body.request_source
+
+            const home_url = req.body.website_url
+            
+            const startHttps = req.body.needs_https
+
+            const endSlash = req.body.needs_endslash
+
+            const selectors = req.body.selectors
+
+            const code = req.body.code_snippet
+
+            const is_using_selectors = JSON.parse(req.body.is_using_selectors)
+
+            const is_using_snippets = JSON.parse(req.body.is_using_snippets)
+
+            const website_cost = req.body.website_cost
+
+            const global_rank = req.body.global_rank
+
+            const local_rank = req.body.local_rank
+
+            const _uri = new url_helper(_req_url, request_source, startHttps, endSlash)
+
+            const _uri_response = await _uri.MAKE_REQUEST()
+
+            const url = await _uri.FORMATTED_URL()
+
+            const _htm = new html_helper(_uri_response, home_url, startHttps, endSlash)
+
+            const _raw_html = await _htm.HTML()
+
+            if(is_using_selectors){
+
+                const _article = new article_helper(_raw_html, selectors)
+
+                const title = await _article.ARTICLE_TITLE()
+
+                const date = await _article.ARTICLE_PUBLISH()
+
+                const author = await _article.ARTICLE_AUTHOR()
+
+                const section = await _article.ARTICLE_SECTION()
+
+                const html = await _article.ARTICLE_HTML()
+
+                const text = await _article.ARTICLE_TEXT()
+
+                const image = await _article.ARTICLE_IMAGE()
+
+                const video = await _article.ARTICLE_VIDEO()
+
+                const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+
+                const advalue = values.advalue
+
+                const prvalue = values.prvalue
+
+                const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
+
+                res.status(200).send(data)
+
+            }else if(is_using_snippets){
+
+                const Snippet = module.exports = Function(code)()
+
+                const _article = new Snippet(_raw_html, $string, $moment)
+
+                const title = await _article.ARTICLE_TITLE()
+
+                const date = await _article.ARTICLE_PUBLISH()
+
+                const author = await _article.ARTICLE_AUTHOR()
+
+                const section = await _article.ARTICLE_SECTION()
+
+                const html = await _article.ARTICLE_HTML()
+
+                const text = await _article.ARTICLE_TEXT()
+
+                const image = await _article.ARTICLE_IMAGE()
+
+                const video = await _article.ARTICLE_VIDEO()
+
+                const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+                
+                const advalue = values.advalue
+
+                const prvalue = values.prvalue
+
+                const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
+
+                res.status(200).send(data)
+            }else{
+                next('Selectors and Snippets are not configured!')
+            }
+
+
+        } catch (error) {
+            // if(error.hasOwnProperty('stack')){
+            //     res.status(500).send(error.stack)
+            // }else{
+            //     res.status(500).send(error)
+            // }
+            console.log(error)
+            next(error)
+            
+        }
+    })
+
+    router.post(name+'/store', async function(req, res, next){
+        try {
+            let check_if_exist = await transaction_helper.CHECK_DOMAIN(req.body.article_url)
+            if(check_if_exist.data > 0){
+                let data = await transaction_helper.STORE_ARTICLE(req)
+                res.status(200).send(data)
+            }else{
+                res.status(500).send({
+                    error: 'Website of this article is not in our monitoring'})
+            }
+        } catch (error) {
+            next(error)
+        }
     })
 
 }
