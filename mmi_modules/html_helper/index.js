@@ -103,12 +103,16 @@ HtmlHelper.prototype.SECTION_LINKS = async function() {
                     return v
                 }
             }).map( v => {
-                let vUrl = new URL(v).href
+                let _u = new URL(v)
+                if(_u.hash){
+                    _u.hash = ''
+                }
+                let vUrl = _u.href
                 vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
                 vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
-                return vUrl
+                return encodeURI(vUrl)
             })
-            resolve(filteredSections)
+            resolve(Array.from(new Set(filteredSections)))
         }catch(e){
             reject(e)
         }
@@ -140,12 +144,16 @@ HtmlHelper.prototype.ARTICLE_LINKS = async function() {
                     return v
                 }
             }).map( v => {
-                let vUrl = new URL(v).href
+                let _u = new URL(v)
+                if(_u.hash){
+                    _u.hash = ''
+                }
+                let vUrl = _u.href
                 vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
                 vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
-                return vUrl
+                return encodeURI(vUrl)
             })
-            resolve(filteredSections)
+            resolve(Array.from(new Set(filteredSections)))
         }catch(e){
             reject(e)
         }

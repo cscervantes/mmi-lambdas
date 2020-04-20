@@ -10,10 +10,14 @@ class UrlHelper {
 }
 
 UrlHelper.prototype.FORMATTED_URL = async function() {
-    let vUrl = this._url
+    let _u = new URL(this._url)
+    if(_u.hash){
+        _u.hash = ''
+    }
+    let vUrl = _u.href
     vUrl = (this._startWithHttp) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
     vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
-    return vUrl
+    return encodeURI(vUrl)
 }
 
 UrlHelper.prototype.HOME_URL = async function(){

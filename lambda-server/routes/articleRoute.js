@@ -6,7 +6,9 @@ const { $string, $moment } = require('../../mmi_modules/npm_mods')
 module.exports = function(name, router){
 
     router.get(name, function(req, res, next){
+
         res.status(200).send('Article lambda endpoint.')
+        
     })
 
     router.post(name+'/test_article', async function(req, res, next){
@@ -107,8 +109,11 @@ module.exports = function(name, router){
                 const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
 
                 res.status(200).send(data)
+
             }else{
+
                 next('Selectors and Snippets are not configured!')
+
             }
 
 
@@ -119,24 +124,94 @@ module.exports = function(name, router){
             //     res.status(500).send(error)
             // }
             console.log(error)
+
             next(error)
             
         }
+
     })
 
     router.post(name+'/store', async function(req, res, next){
+
         try {
-            let check_if_exist = await transaction_helper.CHECK_DOMAIN(req.body.article_url)
+
+            let _article_url = encodeURI(req.body.article_url)
+
+            let check_if_exist = await transaction_helper.CHECK_DOMAIN(_article_url)
+
             if(check_if_exist.data > 0){
-                let data = await transaction_helper.STORE_ARTICLE(req)
-                res.status(200).send(data)
+
+                let get_website = await transaction_helper.GET_WEBSITE(_article_url)
+
+                let urlHelper = new url_helper(_article_url, get_website.request_source, get_website.needs_https, get_website.needs_endslash)
+
+                let clean_url = await urlHelper.FORMATTED_URL()
+
+                req.body.website = get_website._id
+
+                req.body.article_source_url = get_website.fqdn
+
+                req.body.article_url = clean_url                
+
+                let check_article = await transaction_helper.CHECK_ARTICLE(clean_url, req.body.article_status || 'Done')
+
+                if(!req.body.hasOwnProperty('section')){
+
+                    let check_section = await transaction_helper.CHECK_SECTION(get_website.website_url)
+
+                    if(check_section.data > 0){
+
+                        let get_section = await transaction_helper.GET_SECTION(get_website.website_url)
+
+                        req.body.section = get_section._id
+
+                    }else{
+
+                        req.body.section_url = get_website.website_url
+
+                        req.body.website = get_website._id
+
+                        let storeSection = await transaction_helper.STORE_SECTION(req)
+
+                        req.body.section = storeSection.data._id
+
+                    }
+
+                }
+    
+                if(check_article.data > 0){
+
+                    res.status(500).send({
+
+                        error: 'Article is already found!',
+
+                        error_status: 'Exists!'
+
+                    })
+                }else{
+
+                    let data = await transaction_helper.STORE_ARTICLE(req)
+
+                    res.status(200).send(data)
+
+                }
+                
             }else{
+
                 res.status(500).send({
-                    error: 'Website of this article is not in our monitoring'})
+
+                    error: 'Website of this article is not in our monitoring',
+
+                    error_status: 'Not Found!'
+
+                })
             }
         } catch (error) {
+
             next(error)
+
         }
+
     })
 
 }
