@@ -103,7 +103,7 @@ ArticleHelper.prototype.ARTICLE_SECTION = async function(){
     const sectionSelectors = this._selectors.section
     const p = new Promise((resolve, reject) => {
         try {
-            let sections = [_entity('meta[property="article:author"]').attr('content')]
+            let sections = [_entity('meta[property="article:section"]').attr('content')]
             if(sectionSelectors.length > 0){
                 for(let i = 0; i < sectionSelectors.length; i++){
                     let selector = _entity(sectionSelectors[i].selector)
