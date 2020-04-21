@@ -190,161 +190,161 @@ module.exports = function(name, router){
                     })
                 }else{
 
-                    if(req.body.hasOwnProperty('website')){
+                    // if(req.body.hasOwnProperty('website')){
 
-                        const request_source = get_website.request_source
+                    const request_source = get_website.request_source
 
-                        const home_url = get_website.website_url
+                    const home_url = get_website.website_url
+                    
+                    const startHttps = get_website.needs_https
+
+                    const endSlash = get_website.needs_endslash
+
+                    const selectors = get_website.selectors
+
+                    const code = get_website.code_snippet
+
+                    const is_using_selectors = JSON.parse(get_website.is_using_selectors)
+
+                    const is_using_snippets = JSON.parse(get_website.is_using_snippets)
+
+                    const website_cost = get_website.website_cost
+
+                    const global_rank = get_website.alexa_rankings.global
+
+                    const local_rank = get_website.alexa_rankings.local
+
+                    const _uri = new url_helper(clean_url, request_source, startHttps, endSlash)
+
+                    const _uri_response = await _uri.MAKE_REQUEST()
+
+                    const url = await _uri.FORMATTED_URL()
+
+                    const _htm = new html_helper(_uri_response, home_url, startHttps, endSlash)
+
+                    const _raw_html = await _htm.HTML()
+
+                    if(is_using_selectors){
+
+                        const _article = new article_helper(_raw_html, selectors)
+
+                        const title = await _article.ARTICLE_TITLE()
+
+                        const date = await _article.ARTICLE_PUBLISH()
+
+                        const author = await _article.ARTICLE_AUTHOR()
+
+                        const section = await _article.ARTICLE_SECTION()
+
+                        // const html = await _article.ARTICLE_HTML()
+
+                        const text = await _article.ARTICLE_TEXT()
+
+                        const image = await _article.ARTICLE_IMAGE()
+
+                        const video = await _article.ARTICLE_VIDEO()
+
+                        const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+
+                        const advalue = values.advalue
+
+                        const prvalue = values.prvalue
+
+                        // const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
+
+                        // res.status(200).send(data)
+
+                        req.body.article_url = url
+
+                        req.body.article_title = title
+
+                        req.body.article_authors = author
+
+                        req.body.article_publish_date = date
+
+                        req.body.article_sections = section
+
+                        req.body.article_content = text
+
+                        req.body.article_images = image
+
+                        req.body.article_videos = video
+
+                        req.body.article_ad_value = advalue
+
+                        req.body.article_pr_value = prvalue
+
+                        req.body.article_status = 'Done'
+
+                    }else if(is_using_snippets){
+
+                        const Snippet = module.exports = Function(code)()
+
+                        const _article = new Snippet(_raw_html, $string, $moment)
+
+                        const title = await _article.ARTICLE_TITLE()
+
+                        const date = await _article.ARTICLE_PUBLISH()
+
+                        const author = await _article.ARTICLE_AUTHOR()
+
+                        const section = await _article.ARTICLE_SECTION()
+
+                        // const html = await _article.ARTICLE_HTML()
+
+                        const text = await _article.ARTICLE_TEXT()
+
+                        const image = await _article.ARTICLE_IMAGE()
+
+                        const video = await _article.ARTICLE_VIDEO()
+
+                        const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
                         
-                        const startHttps = get_website.needs_https
+                        const advalue = values.advalue
 
-                        const endSlash = get_website.needs_endslash
+                        const prvalue = values.prvalue
 
-                        const selectors = get_website.selectors
+                        // const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
 
-                        const code = get_website.code_snippet
+                        // res.status(200).send(data)
 
-                        const is_using_selectors = JSON.parse(get_website.is_using_selectors)
 
-                        const is_using_snippets = JSON.parse(get_website.is_using_snippets)
+                        req.body.article_url = url
 
-                        const website_cost = get_website.website_cost
+                        req.body.article_title = title
 
-                        const global_rank = get_website.alexa_rankings.global
+                        req.body.article_authors = author
 
-                        const local_rank = get_website.alexa_rankings.local
+                        req.body.article_publish_date = date
 
-                        const _uri = new url_helper(clean_url, request_source, startHttps, endSlash)
+                        req.body.article_sections = section
 
-                        const _uri_response = await _uri.MAKE_REQUEST()
+                        req.body.article_content = text
 
-                        const url = await _uri.FORMATTED_URL()
+                        req.body.article_images = image
 
-                        const _htm = new html_helper(_uri_response, home_url, startHttps, endSlash)
+                        req.body.article_videos = video
 
-                        const _raw_html = await _htm.HTML()
+                        req.body.article_ad_value = advalue
 
-                        if(is_using_selectors){
+                        req.body.article_pr_value = prvalue
 
-                            const _article = new article_helper(_raw_html, selectors)
+                        req.body.article_status = 'Done'
 
-                            const title = await _article.ARTICLE_TITLE()
+                    }else{
 
-                            const date = await _article.ARTICLE_PUBLISH()
+                        // next('Selectors and Snippets are not configured!')
+                        res.status(500).send({
 
-                            const author = await _article.ARTICLE_AUTHOR()
-
-                            const section = await _article.ARTICLE_SECTION()
-
-                            // const html = await _article.ARTICLE_HTML()
-
-                            const text = await _article.ARTICLE_TEXT()
-
-                            const image = await _article.ARTICLE_IMAGE()
-
-                            const video = await _article.ARTICLE_VIDEO()
-
-                            const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
-
-                            const advalue = values.advalue
-
-                            const prvalue = values.prvalue
-
-                            // const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
-
-                            // res.status(200).send(data)
-
-                            req.body.article_url = url
-
-                            req.body.article_title = title
-
-                            req.body.article_authors = author
-
-                            req.body.article_publish_date = date
-
-                            req.body.article_sections = section
-
-                            req.body.article_content = text
-
-                            req.body.article_images = image
-
-                            req.body.article_videos = video
-
-                            req.body.article_ad_value = advalue
-
-                            req.body.article_pr_value = prvalue
-
-                            req.body.article_status = 'Done'
-
-                        }else if(is_using_snippets){
-
-                            const Snippet = module.exports = Function(code)()
-
-                            const _article = new Snippet(_raw_html, $string, $moment)
-
-                            const title = await _article.ARTICLE_TITLE()
-
-                            const date = await _article.ARTICLE_PUBLISH()
-
-                            const author = await _article.ARTICLE_AUTHOR()
-
-                            const section = await _article.ARTICLE_SECTION()
-
-                            // const html = await _article.ARTICLE_HTML()
-
-                            const text = await _article.ARTICLE_TEXT()
-
-                            const image = await _article.ARTICLE_IMAGE()
-
-                            const video = await _article.ARTICLE_VIDEO()
-
-                            const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
-                            
-                            const advalue = values.advalue
-
-                            const prvalue = values.prvalue
-
-                            // const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
-
-                            // res.status(200).send(data)
-
-
-                            req.body.article_url = url
-
-                            req.body.article_title = title
-
-                            req.body.article_authors = author
-
-                            req.body.article_publish_date = date
-
-                            req.body.article_sections = section
-
-                            req.body.article_content = text
-
-                            req.body.article_images = image
-
-                            req.body.article_videos = video
-
-                            req.body.article_ad_value = advalue
-
-                            req.body.article_pr_value = prvalue
-
-                            req.body.article_status = 'Done'
-
-                        }else{
-
-                            // next('Selectors and Snippets are not configured!')
-                            res.status(500).send({
-
-                                error: 'Selectors and Snippets are not configured!',
-            
-                                error_status: 'Parser Issue!'
-            
-                            })
-
-                        }
+                            error: 'Selectors and Snippets are not configured!',
+        
+                            error_status: 'Parser Issue!'
+        
+                        })
 
                     }
+
+                    // }
 
                     let data = await transaction_helper.STORE_ARTICLE(req)
 

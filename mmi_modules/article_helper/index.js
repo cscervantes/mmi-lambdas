@@ -189,16 +189,28 @@ ArticleHelper.prototype.ARTICLE_TEXT = async function(){
 ArticleHelper.prototype.ARTICLE_IMAGE = async function(){
     const html = await this.ARTICLE_HTML()
     let fromContent = $cheerio.load(html, {decodeEntities:true})
+    const _entity = this._html
+    let imageSelectors = this._selectors.image
     const p = new Promise((resolve, reject) => {
         try {
             let imageFromContent = fromContent('img').map(function(){
                 return fromContent(this).attr('src')
             }).get()
 
-            let imageFromSelector = []
+            let imageFromSelector = [_entity('meta[property="og:image"]').attr('content')]
+            if(imageSelectors.length > 0){
+                for(let i = 0; i < imageSelectors.length; i++){
+                    let selector = _entity(imageSelectors[i].selector)
+                    let attribute = imageSelectors[i].attribute
+                    if(selector.length > 0){
+                        imageFromSelector.push(selector.attr(attribute))
+                        break;
+                    }  
+                }
+            }
 
-            let images = imageFromContent.concat(imageFromSelector)
-            resolve(images)
+            let images = imageFromContent.concat(imageFromSelector).filter(v=>v)
+            resolve(Array.from(new Set(images)))
         } catch (error) {
             reject(error)
         }
@@ -210,6 +222,8 @@ ArticleHelper.prototype.ARTICLE_IMAGE = async function(){
 ArticleHelper.prototype.ARTICLE_VIDEO = async function(){
     const html = await this.ARTICLE_HTML()
     let fromContent = $cheerio.load(html, {decodeEntities:true})
+    const _entity = this._html
+    let videoSelectors = this._selectors.video
     const p = new Promise((resolve, reject) => {
         try {
             let videoFromContent = fromContent('iframe').map(function(){
@@ -217,9 +231,19 @@ ArticleHelper.prototype.ARTICLE_VIDEO = async function(){
             }).get()
 
             let videoFromSelector = []
+            if(videoSelectors.length > 0){
+                for(let i = 0; i < videoSelectors.length; i++){
+                    let selector = _entity(videoSelectors[i].selector)
+                    let attribute = videoSelectors[i].attribute
+                    if(selector.length > 0){
+                        videoFromSelector.push(selector.attr(attribute))
+                        break;
+                    }  
+                }
+            }
 
-            let videos = videoFromContent.concat(videoFromSelector)
-            resolve(videos)
+            let videos = videoFromContent.concat(videoFromSelector).filter(v=>v)
+            resolve(Array.from(new Set(videos)))
         } catch (error) {
             reject(error)
         }
