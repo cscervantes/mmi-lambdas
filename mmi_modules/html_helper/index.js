@@ -87,20 +87,20 @@ HtmlHelper.prototype.SECTION_LINKS = async function() {
             let filteredSections = all_links.filter( v => {
                 if(filters.excludes.length > 0){
                     let f = filters.excludes.map(f=>{
-                        return `'${v}'.search(/${f}/g) == -1`
+                        return `"${encodeURI(v)}".search(/${f}/g) == -1`
                     }).join(' && ')
                     return eval(f.toString())
                 }else{
-                    return v
+                    return encodeURI(v)
                 }
             }).filter( v => {
                 if(filters.includes.length > 0){
                     let f = filters.includes.map(f=>{
-                        return `'${v}'.search(/${f}/g) != -1`
+                        return `"${encodeURI(v)}".search(/${f}/g) != -1`
                     }).join(' || ')
                     return eval(f.toString())
                 }else{
-                    return v
+                    return encodeURI(v)
                 }
             }).map( v => {
                 let _u = new URL(v)
@@ -128,20 +128,20 @@ HtmlHelper.prototype.ARTICLE_LINKS = async function() {
             let filteredSections = all_links.filter( v => {
                 if(filters.excludes.length > 0){
                     let f = filters.excludes.map(f=>{
-                        return `'${v}'.search(/${f}/g) == -1`
+                        return `"${encodeURI(v)}".search(/${f}/g) == -1`
                     }).join(' && ')
                     return eval(f.toString())
                 }else{
-                    return v
+                    return encodeURI(v)
                 }
             }).filter( v => {
                 if(filters.includes.length > 0){
                     let f = filters.includes.map(f=>{
-                        return `'${v}'.search(/${f}/g) != -1`
+                        return `"${encodeURI(v)}".search(/${f}/g) != -1`
                     }).join(' || ')
                     return eval(f.toString())
                 }else{
-                    return v
+                    return encodeURI(v)
                 }
             }).map( v => {
                 let _u = new URL(v)

@@ -75,22 +75,23 @@ ArticleHelper.prototype.ARTICLE_AUTHOR = async function(){
     const authorSelectors = this._selectors.author
     const p = new Promise((resolve, reject) => {
         try {
-            let author = _entity('meta[property="article:author"]').attr('content') || 'No - Author'
+            let authors = [_entity('meta[property="article:author"]').attr('content') || 'No - Author']
             if(authorSelectors.length > 0){
                 for(let i = 0; i < authorSelectors.length; i++){
                     let selector = _entity(authorSelectors[i].selector)
                     let attribute = authorSelectors[i].attribute
                     if(selector.length > 0){
                         if(attribute){
-                            author = selector.attr(attribute)
+                            authors.push(selector.attr(attribute))
                         }else{
-                            author = selector.text().trim()
+                            authors.push(selector.text().trim())
                         }
                         break;
                     }  
                 }
             }
-            resolve(author) 
+            console.log(authors)
+            resolve(Array.from(new Set(authors.filter(v=>v)))) 
         } catch (error) {
             reject(error)
         }
@@ -103,22 +104,23 @@ ArticleHelper.prototype.ARTICLE_SECTION = async function(){
     const sectionSelectors = this._selectors.section
     const p = new Promise((resolve, reject) => {
         try {
-            let section = _entity('meta[property="article:author"]').attr('content')
+            let sections = [_entity('meta[property="article:author"]').attr('content')]
             if(sectionSelectors.length > 0){
                 for(let i = 0; i < sectionSelectors.length; i++){
                     let selector = _entity(sectionSelectors[i].selector)
                     let attribute = sectionSelectors[i].attribute
                     if(selector.length > 0){
                         if(attribute){
-                            section = selector.attr(attribute)
+                            sections.push(selector.attr(attribute))
                         }else{
-                            section = selector.text().trim()
+                            sections.push(selector.text().trim())
                         }
                         break;
                     }  
                 }
             }
-            resolve(section) 
+            console.log(sections)
+            resolve(Array.from(new Set(sections.filter(v=>v))))
         } catch (error) {
             reject(error)
         }

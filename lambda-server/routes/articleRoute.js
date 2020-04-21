@@ -258,11 +258,11 @@ module.exports = function(name, router){
 
                             req.body.article_title = title
 
-                            req.body.article_author = author
+                            req.body.article_authors = author
 
                             req.body.article_publish_date = date
 
-                            req.body.article_section = section
+                            req.body.article_sections = section
 
                             req.body.article_content = text
 
@@ -313,11 +313,11 @@ module.exports = function(name, router){
 
                             req.body.article_title = title
 
-                            req.body.article_author = author
+                            req.body.article_authors = author
 
                             req.body.article_publish_date = date
 
-                            req.body.article_section = section
+                            req.body.article_sections = section
 
                             req.body.article_content = text
 
@@ -363,11 +363,7 @@ module.exports = function(name, router){
                 })
             }
         } catch (error) {
-            req.body.article_url = encodeURI(req.body.article_url)
-            req.body.article_status = 'Error'
-            req.body.article_error_status = error
-            let storeError = await transaction_helper.STORE_ARTICLE(req)
-            next(storeError)
+            next(error)
 
         }
 
