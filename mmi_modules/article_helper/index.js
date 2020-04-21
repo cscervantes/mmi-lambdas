@@ -90,7 +90,6 @@ ArticleHelper.prototype.ARTICLE_AUTHOR = async function(){
                     }  
                 }
             }
-            console.log(authors)
             resolve(Array.from(new Set(authors.filter(v=>v)))) 
         } catch (error) {
             reject(error)
@@ -119,7 +118,6 @@ ArticleHelper.prototype.ARTICLE_SECTION = async function(){
                     }  
                 }
             }
-            console.log(sections)
             resolve(Array.from(new Set(sections.filter(v=>v))))
         } catch (error) {
             reject(error)
