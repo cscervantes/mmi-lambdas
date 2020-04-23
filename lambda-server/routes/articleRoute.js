@@ -369,4 +369,14 @@ module.exports = function(name, router){
 
     })
 
+    router.post(name+'/media_values', async function(req, res, next){
+        try {
+            const { global, local, website_cost, text, images, videos } = req.body
+            const alexa = await media_value_helper( global, local, website_cost, text, images, videos)
+            res.status(200).send({'data': alexa})
+        } catch (error) {
+            next(error)
+        }
+    })
+
 }
