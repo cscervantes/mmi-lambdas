@@ -75,7 +75,7 @@ ArticleHelper.prototype.ARTICLE_AUTHOR = async function(){
     const authorSelectors = this._selectors.author
     const p = new Promise((resolve, reject) => {
         try {
-            let authors = [_entity('meta[property="article:author"]').attr('content') || 'No - Author']
+            let authors = [_entity('meta[property="article:author"]').attr('content')]
             if(authorSelectors.length > 0){
                 for(let i = 0; i < authorSelectors.length; i++){
                     let selector = _entity(authorSelectors[i].selector)
@@ -84,13 +84,18 @@ ArticleHelper.prototype.ARTICLE_AUTHOR = async function(){
                         if(attribute){
                             authors.push(selector.attr(attribute))
                         }else{
-                            authors.push(selector.text().trim())
+                            // authors.push(selector.text().trim())
+                            _entity(selector).each(function(i, e){
+                                authors.push(_entity(e).text().trim())
+                            })
                         }
                         break;
                     }  
                 }
             }
-            resolve(Array.from(new Set(authors.filter(v=>v)))) 
+            let _uniqAuthors = Array.from(new Set(authors.filter(v=>v)))
+            let _authors = (_uniqAuthors.length > 0) ? _uniqAuthors : ['No - Author']
+            resolve(_authors) 
         } catch (error) {
             reject(error)
         }
@@ -112,13 +117,18 @@ ArticleHelper.prototype.ARTICLE_SECTION = async function(){
                         if(attribute){
                             sections.push(selector.attr(attribute))
                         }else{
-                            sections.push(selector.text().trim())
+                            _entity(selector).each(function(i, e){
+                                sections.push(_entity(e).text().trim())
+                            })
                         }
                         break;
                     }  
                 }
             }
-            resolve(Array.from(new Set(sections.filter(v=>v))))
+
+            let _uniqSections = Array.from(new Set(sections.filter(v=>v)))
+            let _sections = (_uniqSections.length > 0) ? _uniqSections : []
+            resolve(_sections)
         } catch (error) {
             reject(error)
         }
