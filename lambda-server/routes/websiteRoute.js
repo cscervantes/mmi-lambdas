@@ -20,13 +20,13 @@ module.exports = function(name, router){
 
             const _request_source = req.body.request_source
             
-            const _uri = new url_helper(_req_url, _request_source, false, false)
+            const _uri = new url_helper(_req_url, _request_source, true, false, false)
 
             const _uri_response = await _uri.MAKE_REQUEST()
 
             const _uri_origin = await _uri.RELATIVE_PATH()
 
-            const _htm = new html_helper(_uri_response, _uri_origin, false, false)
+            const _htm = new html_helper(_uri_response, _uri_origin, true, false, false)
 
             const urls = await _htm.ALL_LINKS()
 
@@ -46,7 +46,7 @@ module.exports = function(name, router){
 
             const request_source = req.body.request_source
             
-            const _uri = new url_helper(_req_url, request_source, false, false)
+            const _uri = new url_helper(_req_url, request_source, true, false, false)
 
             const _uri_response = await _uri.MAKE_REQUEST()
 
@@ -58,7 +58,7 @@ module.exports = function(name, router){
 
             const url = await _uri.FORMATTED_URL()
 
-            const _htm = new html_helper(_uri_response, _uri_origin, false, false)
+            const _htm = new html_helper(_uri_response, _uri_origin, true, false, false)
 
             let $ = await _htm.HTML()
 
@@ -104,6 +104,8 @@ module.exports = function(name, router){
             const request_source = req.body.request_source
 
             const home_url = req.body.website_url
+
+            const includeSearch = req.body.needs_search_params
             
             const startHttps = req.body.needs_https
 
@@ -113,13 +115,13 @@ module.exports = function(name, router){
 
             const article_filters = req.body.article_filters
             
-            const _uri = new url_helper(_req_url, request_source, startHttps, endSlash)
+            const _uri = new url_helper(_req_url, request_source, includeSearch, startHttps, endSlash)
 
             const _uri_response = await _uri.MAKE_REQUEST()
 
             const url = await _uri.FORMATTED_URL()
 
-            const _htm = new html_helper(_uri_response, home_url, startHttps, endSlash, section_filters, article_filters)
+            const _htm = new html_helper(_uri_response, home_url, includeSearch, startHttps, endSlash, section_filters, article_filters)
 
             const articles = await _htm.ARTICLE_LINKS()
 

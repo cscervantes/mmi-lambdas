@@ -1,9 +1,10 @@
 const { $useragent, $request, $cloudscraper } = require('../npm_mods')
 
 class UrlHelper {
-    constructor(_url, _request_source, startWithHttp, endsWithSlash){
+    constructor(_url, _request_source, includeSearch, startWithHttp, endsWithSlash){
         this._url = _url
         this._request_source = _request_source
+        this._includeSearch = JSON.parse(includeSearch) // boolean
         this._startWithHttp = JSON.parse(startWithHttp)
         this._endsWithSlash = JSON.parse(endsWithSlash)
     }
@@ -15,6 +16,7 @@ UrlHelper.prototype.FORMATTED_URL = async function() {
         _u.hash = ''
     }
     let vUrl = _u.href
+    vUrl = (this._includeSearch) ? vUrl  : new URL(vUrl).origin+new URL(vUrl).pathname
     vUrl = (this._startWithHttp) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
     vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
     return encodeURI(vUrl)

@@ -60,7 +60,7 @@ class MediaValue {
                     wordcount = wordcount + 100
                 }
 
-                if(textLength === 1000){
+                if(wordcount === 1000){
                     wordcount = 1000
                 }
                 resolve(wordcount)
@@ -120,7 +120,7 @@ class MediaValue {
                     modifier = modifier + (advalue * 0.20);
                 }
     
-                const prvalue = advalue + modifier;
+                const prvalue = advalue + modifier;                
                 resolve(prvalue)
             } catch (error) {
                 reject(0)
@@ -136,6 +136,14 @@ module.exports = async function(globalRank, localRank, websiteCost, text, images
             const mediaValue = new MediaValue(globalRank, localRank, websiteCost, text, images, videos)
             const advalue = await mediaValue.AdValue()
             const prvalue = await mediaValue.PrValue()
+            const wordcount = await mediaValue.WordCount()
+            const rank = await mediaValue.Rank()
+            const pubcost = await mediaValue.Pubcost()
+            console.log('Rank', rank)
+            console.log('Word Count', wordcount)
+            console.log('Pubcost', pubcost)
+            console.log('Ad Value', advalue)
+            console.log('Pr Value', prvalue)
             resolve({advalue, prvalue})
         } catch (error) {
             console.log(error)

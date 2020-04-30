@@ -1,9 +1,10 @@
 const { $cheerio, $path } = require('../npm_mods')
 
 class HtmlHelper {
-    constructor(_html, _baseUrl, _startWithHttps, _endsWithSlash, _sectionFilters, _articleFilters){
+    constructor(_html, _baseUrl, _includeSearch, _startWithHttps, _endsWithSlash, _sectionFilters, _articleFilters){
         this._html = _html //string
         this._baseUrl = _baseUrl // string
+        this._includeSearch = JSON.parse(_includeSearch) // boolean
         this._startWithHttps = JSON.parse(_startWithHttps) // boolean
         this._endsWithSlash = JSON.parse(_endsWithSlash) // boolean
         this._sectionFilters = _sectionFilters // array object
@@ -108,6 +109,7 @@ HtmlHelper.prototype.SECTION_LINKS = async function() {
                     _u.hash = ''
                 }
                 let vUrl = _u.href
+                vUrl = (this._includeSearch) ? vUrl  : new URL(vUrl).origin+new URL(vUrl).pathname
                 vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
                 vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
                 return encodeURI(vUrl)
@@ -149,6 +151,7 @@ HtmlHelper.prototype.ARTICLE_LINKS = async function() {
                     _u.hash = ''
                 }
                 let vUrl = _u.href
+                vUrl = (this._includeSearch) ? vUrl  : new URL(vUrl).origin+new URL(vUrl).pathname
                 vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
                 vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
                 return encodeURI(vUrl)

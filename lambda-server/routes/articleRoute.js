@@ -19,6 +19,8 @@ module.exports = function(name, router){
             const request_source = req.body.request_source
 
             const home_url = req.body.website_url
+
+            const includeSearch = req.body.needs_search_params
             
             const startHttps = req.body.needs_https
 
@@ -38,13 +40,13 @@ module.exports = function(name, router){
 
             const local_rank = req.body.local_rank
 
-            const _uri = new url_helper(_req_url, request_source, startHttps, endSlash)
+            const _uri = new url_helper(_req_url, request_source, includeSearch, startHttps, endSlash)
 
             const _uri_response = await _uri.MAKE_REQUEST()
 
             const url = await _uri.FORMATTED_URL()
 
-            const _htm = new html_helper(_uri_response, home_url, startHttps, endSlash)
+            const _htm = new html_helper(_uri_response, home_url, includeSearch, startHttps, endSlash)
 
             const _raw_html = await _htm.HTML()
 
@@ -143,7 +145,7 @@ module.exports = function(name, router){
 
                 let get_website = await transaction_helper.GET_WEBSITE(_article_url)
 
-                let urlHelper = new url_helper(_article_url, get_website.request_source, get_website.needs_https, get_website.needs_endslash)
+                let urlHelper = new url_helper(_article_url, get_website.request_source, get_website.needs_search_params, get_website.needs_https, get_website.needs_endslash)
 
                 let clean_url = await urlHelper.FORMATTED_URL()
 
@@ -195,6 +197,8 @@ module.exports = function(name, router){
                     const request_source = get_website.request_source
 
                     const home_url = get_website.website_url
+
+                    const includeSearch = get_website.needs_search_params
                     
                     const startHttps = get_website.needs_https
 
@@ -214,13 +218,13 @@ module.exports = function(name, router){
 
                     const local_rank = get_website.alexa_rankings.local
 
-                    const _uri = new url_helper(clean_url, request_source, startHttps, endSlash)
+                    const _uri = new url_helper(clean_url, request_source, includeSearch, startHttps, endSlash)
 
                     const _uri_response = await _uri.MAKE_REQUEST()
 
                     const url = await _uri.FORMATTED_URL()
 
-                    const _htm = new html_helper(_uri_response, home_url, startHttps, endSlash)
+                    const _htm = new html_helper(_uri_response, home_url, includeSearch, startHttps, endSlash)
 
                     const _raw_html = await _htm.HTML()
 
