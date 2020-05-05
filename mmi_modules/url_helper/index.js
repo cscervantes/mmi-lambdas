@@ -46,17 +46,17 @@ UrlHelper.prototype.MAKE_REQUEST = async function(){
     }
     // console.log(headers)
     const promise = new Promise((resolve, reject) => {
+        const _uri = (this._url.indexOf('%') != -1) ? decodeURI(this._url) : encodeURI(this._url)
         try{
             if(this._request_source === 'cloudscraper'){
-                $cloudscraper.get(encodeURI(this._url), {headers: headers}, function(error, response, body){
+                $cloudscraper.get(_uri, {headers: headers}, function(error, response, body){
                     // console.log(error, body)
                     if(error) reject(error);
                     else if(!body && !error) reject('Something is wrong with the website.');
                     else resolve(body);
                 })
             }else{
-                $request.get(encodeURI(this._url), {headers: headers}, function(error, response, body){
-                    // console.log(error, body)
+                $request.get(_uri, {headers: headers}, function(error, response, body){
                     if(error) reject(error);
                     else if(!body && !error) reject('Something is wrong with the website.');
                     else resolve(body);

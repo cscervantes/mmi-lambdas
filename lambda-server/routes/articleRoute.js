@@ -14,7 +14,7 @@ module.exports = function(name, router){
     router.post(name+'/test_article', async function(req, res, next){
         try {
             
-            const _req_url = req.body.url
+            const _req_url = (req.body.url.indexOf('%') != -1) ? decodeURI(req.body.url) : req.body.url 
 
             const request_source = req.body.request_source
 
@@ -136,8 +136,7 @@ module.exports = function(name, router){
     router.post(name+'/store', async function(req, res, next){
 
         try {
-
-            let _article_url = encodeURI(req.body.article_url)
+            let _article_url = (req.body.article_url.indexOf('%') != -1 ) ? decodeURI(req.body.article_url) : req.body.article_url
 
             let check_if_exist = await transaction_helper.CHECK_DOMAIN(_article_url)
 
