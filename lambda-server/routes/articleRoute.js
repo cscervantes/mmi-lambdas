@@ -1,6 +1,6 @@
 var createError = require('http-errors')
 const { url_helper, html_helper, alexa_helper, country_language_helper, article_helper, media_value_helper, transaction_helper} = require('../../mmi_modules')
-const { $string, $moment } = require('../../mmi_modules/npm_mods')
+const { $string, $moment, $franc } = require('../../mmi_modules/npm_mods')
 
 
 module.exports = function(name, router){
@@ -76,7 +76,9 @@ module.exports = function(name, router){
 
                 const prvalue = values.prvalue
 
-                const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
+                const language = $franc(text)
+
+                const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue, language}
 
                 res.status(200).send(data)
 
@@ -108,7 +110,9 @@ module.exports = function(name, router){
 
                 const prvalue = values.prvalue
 
-                const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue}
+                const language = $franc(text)
+
+                const data = {url, title, date, author, section, html, text, image, video, advalue, prvalue, language}
 
                 res.status(200).send(data)
 
@@ -279,6 +283,8 @@ module.exports = function(name, router){
 
                         req.body.article_status = 'Done'
 
+                        req.body.article_language = $franc(text)
+
                     }else if(is_using_snippets){
 
                         const Snippet = module.exports = Function(code)()
@@ -333,6 +339,8 @@ module.exports = function(name, router){
                         req.body.article_pr_value = prvalue
 
                         req.body.article_status = 'Done'
+
+                        req.body.article_language = $franc(text)
 
                     }else{
 

@@ -8,5 +8,6 @@ module.exports = {
     '$string': require('string'),
     '$moment': require('moment'),
     '$stripcomments': require('strip-html-comments'),
-    '$pretty': require('pretty')
+    '$pretty': require('pretty'),
+    '$franc': require('franc')
 }
