@@ -23,6 +23,20 @@ Transactions.STORE_ARTICLE = async(req) => {
     return p
 }
 
+Transactions.UPDATE_ARTICLE = async(id, body) => {
+    const p = new Promise((resolve, reject) => {
+        try {
+            request.put(configUrl+'crawl/article/'+id, {headers:configHeaders, body:body}, (err, resp, body) => {
+                if(err) reject(err);
+                else resolve(body)
+            })
+        } catch (error) {
+           reject(error) 
+        }
+    })
+    return p
+}
+
 Transactions.STORE_SECTION = async(req) => {
     const p = new Promise((resolve, reject) => {
         try {
