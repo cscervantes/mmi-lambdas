@@ -63,7 +63,7 @@ const crawlSectionFunc = async () => {
                             headers: event.headers,
                             body: {
                                 article_url: article,
-                                article_status: "Done"
+                                // article_status: "Done"
                             }
                         }
                     })
