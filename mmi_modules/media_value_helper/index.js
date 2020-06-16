@@ -519,7 +519,7 @@ class MediaValue {
                     modifier = modifier + (advalue * 0.01);
                 }
                 else if(rank >= 1000 || rank === 0){
-                    console.log("Rank 1000 & up : plus 1%");
+                    console.log("Rank 1000 & up or Rank 0: plus 1%");
                     modifier = modifier + (advalue * 0.01);
                 }
 
