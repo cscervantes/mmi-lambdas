@@ -85,7 +85,7 @@ module.exports = function(name, router){
 
                 const Snippet = module.exports = Function(code)()
 
-                const _article = new Snippet(_raw_html, $string, $moment)
+                const _article = new Snippet(_raw_html, $string, $moment, url)
 
                 const title = await _article.ARTICLE_TITLE()
 
@@ -288,7 +288,7 @@ module.exports = function(name, router){
 
                         const Snippet = module.exports = Function(code)()
 
-                        const _article = new Snippet(_raw_html, $string, $moment)
+                        const _article = new Snippet(_raw_html, $string, $moment, url)
 
                         const title = await _article.ARTICLE_TITLE()
 
@@ -472,7 +472,7 @@ module.exports = function(name, router){
 
                 const Snippet = module.exports = Function(code)()
 
-                const _article = new Snippet(_raw_html, $string, $moment)
+                const _article = new Snippet(_raw_html, $string, $moment, url)
 
                 const title = await _article.ARTICLE_TITLE()
 
