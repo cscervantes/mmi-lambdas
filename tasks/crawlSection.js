@@ -3,7 +3,8 @@ const fetch = require('./fetch')
 const async = require('async')
 
 const lambda_enpoint = "http://localhost:3030/lambda-api/"
-const source_enpoint = "http://localhost:4040/mmi-endpoints/v0/"
+// const source_enpoint = "http://localhost:4040/mmi-endpoints/v0/"
+const source_enpoint = "http://192.168.3.143:4040/mmi-endpoints/v0/"
 
 const event = {}
 event.url = null

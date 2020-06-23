@@ -3,7 +3,8 @@ const fetch = require('./fetch')
 
 const async = require('async')
 
-const source_enpoint = "http://localhost:4040/mmi-endpoints/v0/"
+// const source_enpoint = "http://localhost:4040/mmi-endpoints/v0/"
+const source_enpoint = "http://192.168.3.143:4040/mmi-endpoints/v0/"
 
 const event = {}
 event.url = null
@@ -18,6 +19,7 @@ const syncMediaWeb = async () => {
         event.method = "GET"
         event.headers['Content-type'] = 'application/json'
         let countFalse = await fetch(event.url, event.method, event.headers)
+        console.log(countFalse)
         await Promise.allSettled(countFalse.data.map(async v => {
             let body = {
                 mwe_src_url: v.article_source_url,
