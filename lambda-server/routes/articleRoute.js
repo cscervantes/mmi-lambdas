@@ -539,7 +539,11 @@ module.exports = function(name, router){
             res.status(200).send(data)
 
         } catch (error) {
-
+            await transaction_helper.UPDATE_ARTICLE(req.params.id, {
+                article_status: "Error",
+                date_updated: new Date(),
+                article_error_status: error
+            })
             next(error)
 
         }
