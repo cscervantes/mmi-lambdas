@@ -29,7 +29,7 @@ const syncMediaWeb = async () => {
                 mwe_src_med_type: 'Web',
                 mwe_full_url: v.article_url,
                 mwe_content: v.article_content,
-                mwe_title: v.article_url,
+                mwe_title: v.article_title,
                 mwe_section: v.article_sections.join(', '),
                 mwe_val: v.article_ad_value,
                 mwe_mod_val: v.article_pr_value,
