@@ -26,3 +26,6 @@ lambdas
         - run "node tasks/crawlArticle" (cron this every 2hours)
     * tasks/insertRaw.js (This will sync data from mongodb article collections to mysql media_web_raw)
         - run "node tasks/insertRraw" (cron this every 3 minutes)
+
+- PM2 Startup
+    *  PRODUCTION=true pm2 start lambda-server/serve.js --name lambda-server -i 4(number of cluster)
