@@ -1,16 +1,16 @@
+require('dotenv').config()
 
 const fetch = require('./fetch')
 
 const async = require('async')
 
-const lambda_enpoint = "http://localhost:3030/lambda-api/"
-// const source_enpoint = "http://localhost:4040/mmi-endpoints/v0/"
-const source_enpoint = "http://192.168.3.143:4040/mmi-endpoints/v0/"
+const lambda_enpoint = (JSON.parse(process.env.PRODUCTION)) ? process.env.PRODUCTION_LAMBDA_ENDPOINT : process.env.DEVELOPMENT_LAMBDA_ENDPOINT
+const source_enpoint = (JSON.parse(process.env.PRODUCTION)) ? process.env.PRODUCTION_SOURCE_ENDPOINT : process.env.DEVELOPMENT_SOURCE_ENDPOINT
 
 const event = {}
 event.url = null
 event.headers = {
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.f2X7W_6J8g6y-jKto1fMj5zq7QkOLu9WBGw5b-sHAIc"
+    "Authorization": "Bearer "+process.env.BEARER_TOKEN
 }
 
 const crawlArticleFunc = async () => {
@@ -93,4 +93,4 @@ const crawlArticleFunc = async () => {
     }
 }
 
-crawlArticleFunc()
+// crawlArticleFunc()
