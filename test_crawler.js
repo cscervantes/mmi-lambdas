@@ -4,7 +4,9 @@ const Crawler = require('./crawlers');
     try {
         const crawl = new Crawler
         // await crawl.addActiveSitesToCrawler()
-        await crawl.crawlActiveWebsites()
+        // await crawl.crawlActiveWebsites()
+        // await crawl.storeToMysql()
+        await crawl.crawlArticles()
     } catch (error) {
         console.error(error)
     }

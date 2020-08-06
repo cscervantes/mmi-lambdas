@@ -19,6 +19,7 @@ const status = process.env.STATUS || "ACTIVE"
 const website_type = process.env.WEBSITE_TYPE || "LOCAL_NEWS"
 
 class Crawler {
+
     async addActiveSitesToCrawler(){
         let func = this.addActiveSitesToCrawler.name
         try {
@@ -48,7 +49,7 @@ class Crawler {
     async crawlActiveWebsites(){
         let func = this.crawlActiveWebsites.name
         try {
-            console.log('Calling',func)
+            console.log('Calling function',func)
             let fields = {
                 "_id":1,
                 "fqdn":1,
@@ -61,7 +62,10 @@ class Crawler {
                 "article_filter":1,
                 "main_sections":1
             }
-            let url = source_enpoint+`crawl/crawl_active_websites?status=${status}&website_type=${website_type}&fields=${JSON.stringify(fields)}`
+            let page_offset = process.env.PAGE_OFFSET || 0
+            let page_size = process.env.PAGE_SIZE || 100
+            // console.log(page_offset, page_size)
+            let url = source_enpoint+`crawl/crawl_active_websites?status=${status}&website_type=${website_type}&fields=${JSON.stringify(fields)}&skip=${page_offset}&limit=${page_size}`
             let result = await fetch(url, 'GET', headers)
             let data = result.data
             let mapData = data.map(v=>{
@@ -96,57 +100,115 @@ class Crawler {
             })
             let flatData = _.shuffle(_.flattenDeep(mapData))
 
-            console.log(flatData.length)
+            // console.log(flatData.length)
 
             // console.log(flatData)
 
-            // let tasks = async.queue( (task, done) => {
+            let tasks = async.queue( (task, done) => {
                 
-            //     setTimeout( async function(){
-            //         const _req_url = task.section_url
+                setTimeout( async function(){
+                    // console.log(task)
+                    const _req_url = task.section_url
 
-            //         const request_source = task.request_source
+                    const request_source = task.request_source
 
-            //         const home_url = task.website_url
+                    const home_url = task.website_url
 
-            //         const includeSearch = task.needs_search_params
+                    const includeSearch = task.needs_search_params
                     
-            //         const startHttps = task.needs_https
+                    const startHttps = task.needs_https
 
-            //         const endSlash = task.needs_endslash
+                    const endSlash = task.needs_endslash
 
-            //         const section_filters = task.section_filter
+                    const section_filters = task.section_filter
 
-            //         const article_filters = task.article_filter
+                    const article_filters = task.article_filter
                     
-            //         const _uri = new url_helper(_req_url, request_source, includeSearch, startHttps, endSlash)
+                    const _uri = new url_helper(_req_url, request_source, includeSearch, startHttps, endSlash)
 
-            //         const _uri_response = await _uri.MAKE_REQUEST()
+                    const _uri_response = await _uri.MAKE_REQUEST()
 
-            //         const url = await _uri.FORMATTED_URL()
+                    // const url = await _uri.FORMATTED_URL()
 
-            //         const _htm = new html_helper(_uri_response, home_url, includeSearch, startHttps, endSlash, section_filters, article_filters)
+                    const _htm = new html_helper(_uri_response, home_url, includeSearch, startHttps, endSlash, section_filters, article_filters)
 
-            //         const articles = await _htm.ARTICLE_LINKS()
+                    const articles = await _htm.ARTICLE_LINKS()
 
-            //         console.log(articles)
-            //         done()
-            //     },500);
-            // }, 10)
-            // flatData.forEach(function(element){
-            //     tasks.push(element)
-            // })
-            // tasks.error(function(err, task) {
-            //     console.log(task.section_url, err)
-            // })
-            // tasks.drain(function(){
-            //     console.log('Done.')
-            // })
+                    // console.log(articles)
+                    await processArticle(task.website, task.section, task.fqdn, articles)
+                    done()
+                },500);
+            }, 10)
+            flatData.forEach(function(element){
+                tasks.push(element)
+            })
+            tasks.error(function(err, task) {
+                console.log(task.section_url, err)
+            })
+            tasks.drain(function(){
+                console.log('Done.')
+            })
         } catch (error) {
             throw Error(error)
         }
     }
 
+    async crawlArticles(){
+        try {
+            let countQueued = await fetch(source_enpoint+'article/count', 'POST', headers, {article_status: "Queued"})
+            let queuedArticles = await fetch(source_enpoint+"article?article_status=Queued&limit="+countQueued.data.result, 'GET', headers) 
+            let mapArticles = _.shuffle(queuedArticles.data)
+            console.log(mapArticles)
+        } catch (error) {
+            throw Error(error)
+        }
+    }
+
+    async storeToMysql(){
+        let func = this.storeToMysql.name
+        try {
+            console.log('Calling function', func)
+            let result = await fetch(source_enpoint+'article?is_in_mysql=false&article_status=Done&limit=1000', 'GET', headers)
+            console.log(result.data.length)
+            Promise.allSettled(result.data.map(async v => {
+                let countMedia = await fetch(source_enpoint+'media/count', 'POST', headers, {mwe_full_url: v.article_url})
+                if(countMedia[0].total > 0){
+                    // upate article collection
+                    await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true})
+                }else{
+                    // inser to media_web_raw
+                    let insert_raw = await fetch(source_enpoint+'media/insert_raw', 'POST', headers, {
+                        mwe_src_url: v.article_source_url,
+                        mwe_src_aut_full_name: (v.article_authors.length > 0 ) ? JSON.stringify(Object.assign({}, v.article_authors)) : JSON.stringify({"0":"No - Author"}),
+                        mwe_src_aut_first_name: '',
+                        mwe_src_aut_last_name: '',
+                        mwe_src_med_type: 'Web',
+                        mwe_full_url: v.article_url,
+                        mwe_content: v.article_content,
+                        mwe_title: v.article_title,
+                        mwe_section: v.article_sections.join(', '),
+                        mwe_val: v.article_ad_value,
+                        mwe_mod_val: v.article_pr_value,
+                        mwe_date: v.article_publish_date,
+                        mwe_datetime: v.article_publish_date,
+                        mwe_img_vid_url: JSON.stringify({
+                            img: v.article_images,
+                            vid: v.article_videos
+                        }),
+                        mwe_pub_name: v.website.website_name,
+                        mwe_pub_cc: v.website.country_code,
+                        mwe_lang: v.article_language || 'en'
+                    })
+
+                    if(insert_raw.affectedRows > 0){
+                        await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true})
+                    }
+                }
+            }))
+        } catch (error) {
+            throw Error(error)
+        }
+    }
 }
 
 async function fetch(uri, method, headers, body) {
@@ -180,6 +242,34 @@ async function fetch(uri, method, headers, body) {
     })
 
     return p
+}
+
+async function processArticle(website, section, fqdn, articleLinks) {
+    try {
+        Promise.allSettled(articleLinks.map(v => {
+            setTimeout(() => {
+                fetch(source_enpoint+`article/count`, 'POST', headers, {article_url:v})
+                .then(d=>{
+                    if(d.data.result > 0){
+                        console.log('Existing url',d.data.article_url)
+                    }else{
+                        let article_source_url = fqdn
+                        let article_url = d.data.article_url
+                        let article_status = "Queued"
+                        let date_created = new Date()
+                        let date_updated = new Date()
+                        fetch(source_enpoint+'article', 'POST', headers, {
+                            website, section, article_source_url,
+                            article_url, article_status, date_created, date_updated
+                        }).then(console.log).catch(console.error)
+                    }
+                })
+                .catch(console.error)
+            }, 200);
+        }))
+    } catch (error) {
+        throw Error(error)
+    }
 }
 
 module.exports = Crawler
