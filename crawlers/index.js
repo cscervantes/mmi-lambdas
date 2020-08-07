@@ -3,6 +3,9 @@ require('dotenv').config()
 const _ = require('lodash')
 const async = require('async')
 const request = require('request').defaults({json:true})
+const $string = require('string')
+const $moment = require('moment')
+const $franc = require('franc')
 
 const lambda_enpoint = (JSON.parse(process.env.PRODUCTION)) ? process.env.PRODUCTION_LAMBDA_ENDPOINT : process.env.DEVELOPMENT_LAMBDA_ENDPOINT
 console.log('Lamba URL', lambda_enpoint)
@@ -13,34 +16,66 @@ const headers = {
     "Authorization": "Bearer "+process.env.BEARER_TOKEN
 }
 
-const { url_helper, html_helper } = require('../mmi_modules')
+const { url_helper, html_helper, article_url, media_value_helper } = require('../mmi_modules')
 
 const status = process.env.STATUS || "ACTIVE"
 const website_type = process.env.WEBSITE_TYPE || "LOCAL_NEWS"
+const duration = process.env.DURATION || '1week'
+const page_offset = process.env.PAGE_OFFSET || 0
+const page_size = process.env.PAGE_SIZE || 100
 
 class Crawler {
 
     async addActiveSitesToCrawler(){
         let func = this.addActiveSitesToCrawler.name
         try {
-            let url = source_enpoint+`crawl/last_modified_active_websites?status=${status}&website_type=${website_type}`
+            console.log("###################################")
+            console.log('Calling function', func)           
+            console.log('Status', status)
+            console.log('Type', website_type)
+            console.log('Duration', duration)
+            console.log("###################################")
+            let url = source_enpoint+`crawl/last_modified_active_websites?status=${status}&website_type=${website_type}&duration=${duration}&skip=${page_offset}&limit=${page_size}`
             let result = await fetch(url, "GET", headers)
-            let embedded = result.data.map(v=>v.embedded_sections)
-            // console.log(embedded)
-            let sections = _.flattenDeep(embedded).map(v=>{
-                return {
-                    section: v._id,
-                    type:v.type
-                }
+            let embedded = result.data.map(v=>{
+                let websites = []
+                v.main_sections.forEach(element => {
+                    let website = v._id
+                    let section_url = element
+                    websites.push({
+                        website, section_url
+                    })
+                })
+                return websites
             })
-            console.log(sections, sections.length)
-            // process.exit(0)
-            // let sectionOptions = {
-            //     "url": source_enpoint+"queue",
-            //     "method": "POST",
-            //     "headers": event.headers
-            // }
-            // await Promise.allSettled(sections.map(async(v)=>await fetch(sectionOptions.url, sectionOptions.method, sectionOptions.headers, v)))
+            // console.log(embedded)
+            let sections = _.flattenDeep(embedded)
+            // console.log(sections, sections.length)
+
+            let tasks = async.queue(function(task, callback){
+                setTimeout(() => {
+                    fetch(source_enpoint+'section', 'POST', headers, task)
+                    .then(response=>{
+                        console.log(response)
+                        callback()
+                    })
+                    .catch(error=>{
+                        console.error(error)
+                        callback()
+                    })
+                    
+                }, 200);
+            }, 100)
+
+            sections.forEach(element=>{
+                tasks.push(element)
+            })
+            tasks.error(function(err, task) {
+                console.log(task.section_url, err)
+            })
+            tasks.drain(function(){
+                console.log('Done.')
+            })
         } catch (error) {
             throw Error(error)
         }
@@ -49,7 +84,13 @@ class Crawler {
     async crawlActiveWebsites(){
         let func = this.crawlActiveWebsites.name
         try {
-            console.log('Calling function',func)
+            console.log("###################################")
+            console.log('Calling function', func)           
+            console.log('Status', status)
+            console.log('Type', website_type)
+            console.log('Offset', page_offset)
+            console.log('Size', page_size)
+            console.log("###################################")
             let fields = {
                 "_id":1,
                 "fqdn":1,
@@ -62,8 +103,6 @@ class Crawler {
                 "article_filter":1,
                 "main_sections":1
             }
-            let page_offset = process.env.PAGE_OFFSET || 0
-            let page_size = process.env.PAGE_SIZE || 100
             // console.log(page_offset, page_size)
             let url = source_enpoint+`crawl/crawl_active_websites?status=${status}&website_type=${website_type}&fields=${JSON.stringify(fields)}&skip=${page_offset}&limit=${page_size}`
             let result = await fetch(url, 'GET', headers)
@@ -155,10 +194,225 @@ class Crawler {
 
     async crawlArticles(){
         try {
+            console.log("###################################")
+            console.log('Calling function', func)
+            console.log("###################################")   
             let countQueued = await fetch(source_enpoint+'article/count', 'POST', headers, {article_status: "Queued"})
             let queuedArticles = await fetch(source_enpoint+"article?article_status=Queued&limit="+countQueued.data.result, 'GET', headers) 
             let mapArticles = _.shuffle(queuedArticles.data)
-            console.log(mapArticles)
+
+            console.log('Total Queued',mapArticles.length)
+
+            let tasks = async.queue(function(task, callback){
+                let time = Math.floor((Math.random() * 5000) + 750)
+                setTimeout( async () => {
+                    try {
+                        console.log(`${time}ms Parsing`,task.article_url)
+
+                        fetch(source_enpoint+'article/'+task._id, 'PUT', headers,{
+                            article_status: "Processing",
+                            date_updated: new Date()
+                        }).then( async response => {
+                            console.log(response)
+                            let body = {}
+            
+                            const request_source = task.website.request_source
+
+                            const home_url = task.website.website_url
+
+                            const includeSearch = task.website.needs_search_params
+                            
+                            const startHttps = task.website.needs_https
+
+                            const endSlash = task.website.needs_endslash
+
+                            const selectors = task.website.selectors
+
+                            const code = task.website.code_snippet
+
+                            const is_using_selectors = JSON.parse(task.website.is_using_selectors)
+
+                            const is_using_snippets = JSON.parse(task.website.is_using_snippets)
+
+                            const website_cost = task.website.website_cost
+
+                            const global_rank = task.website.alexa_rankings.global
+
+                            const local_rank = task.website.alexa_rankings.local
+
+                            const _uri = new url_helper(task.article_url, request_source, includeSearch, startHttps, endSlash)
+
+                            const _uri_response = await _uri.MAKE_REQUEST()
+
+                            const url = await _uri.FORMATTED_URL()
+
+                            const _htm = new html_helper(_uri_response, home_url, includeSearch, startHttps, endSlash)
+
+                            const _raw_html = await _htm.HTML()
+
+                            if(is_using_selectors){
+
+                                const _article = new article_helper(_raw_html, selectors)
+                
+                                const title = await _article.ARTICLE_TITLE()
+                
+                                const date = await _article.ARTICLE_PUBLISH()
+                
+                                const author = await _article.ARTICLE_AUTHOR()
+                
+                                const section = await _article.ARTICLE_SECTION()
+                
+                                // const html = await _article.ARTICLE_HTML()
+                
+                                const text = await _article.ARTICLE_TEXT()
+                
+                                const image = await _article.ARTICLE_IMAGE()
+                
+                                const video = await _article.ARTICLE_VIDEO()
+                
+                                const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+                
+                                const advalue = values.advalue
+                
+                                const prvalue = values.prvalue
+                
+                                body.article_url = url
+                
+                                body.article_title = title
+                
+                                body.article_authors = author
+                
+                                body.article_publish_date = date
+                
+                                body.article_sections = section
+                
+                                body.article_content = text
+                
+                                body.article_images = image
+                
+                                body.article_videos = video
+                
+                                body.article_ad_value = advalue
+                
+                                body.article_pr_value = prvalue
+                
+                                body.article_status = 'Done'
+                
+                                body.article_language = $franc(text)
+
+                                body.date_updated = new Date()
+                
+                            }else if(is_using_snippets){
+                
+                                const Snippet = module.exports = Function(code)()
+                
+                                const _article = new Snippet(_raw_html, $string, $moment, url)
+                
+                                const title = await _article.ARTICLE_TITLE()
+                
+                                const date = await _article.ARTICLE_PUBLISH()
+                
+                                const author = await _article.ARTICLE_AUTHOR()
+                
+                                const section = await _article.ARTICLE_SECTION()
+                
+                                // const html = await _article.ARTICLE_HTML()
+                
+                                const text = await _article.ARTICLE_TEXT()
+                
+                                const image = await _article.ARTICLE_IMAGE()
+                
+                                const video = await _article.ARTICLE_VIDEO()
+                
+                                const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+                                
+                                const advalue = values.advalue
+                
+                                const prvalue = values.prvalue
+                
+                                body.article_url = url
+                
+                                body.article_title = title
+                
+                                body.article_authors = author
+                
+                                body.article_publish_date = date
+                
+                                body.article_sections = section
+                
+                                body.article_content = text
+                
+                                body.article_images = image
+                
+                                body.article_videos = video
+                
+                                body.article_ad_value = advalue
+                
+                                body.article_pr_value = prvalue
+                
+                                body.article_status = 'Done'
+                
+                                body.article_language = $franc(text)
+
+                                body.date_updated = new Date()
+                
+                            }else{
+
+                                body.article_status = "Error"
+
+                                body.article_error_status = 'Selectors and Snippets are not configured!'
+
+                                body.date_updated = new Date()
+                            }
+
+                            fetch(source_enpoint+'article/'+task._id, 'PUT', headers, body)
+                            .then(r=>{
+
+                                console.log(r)
+
+                                callback()
+
+                            })
+                            .catch(e=>{
+
+                                console.error(e)
+
+                                callback()
+
+                            })
+
+                        }).catch(error=>{
+
+                            console.error(error)
+
+                            callback()
+
+                        })   
+
+                    } catch (error) {
+                        console.log('Error parsing', task.article_url)
+                        await fetch(source_enpoint+'article/'+task._id, 'PUT', headers,{
+                            article_status: "Error",
+                            date_updated: new Date(),
+                            article_error_status: error
+                        })
+                        console.error(error)
+                        callback()
+                    }
+                    
+                }, time);
+            }, 10)
+
+            mapArticles.forEach(element=>{
+                tasks.push(element)
+            })
+
+            tasks.error(function(err, task) {
+                console.log(task.article_url, err)
+            })
+            tasks.drain(function(){
+                console.log('Done.')
+            })
         } catch (error) {
             throw Error(error)
         }
@@ -167,7 +421,9 @@ class Crawler {
     async storeToMysql(){
         let func = this.storeToMysql.name
         try {
+            console.log("###################################")
             console.log('Calling function', func)
+            console.log("###################################")
             let result = await fetch(source_enpoint+'article?is_in_mysql=false&article_status=Done&limit=1000', 'GET', headers)
             console.log(result.data.length)
             Promise.allSettled(result.data.map(async v => {
