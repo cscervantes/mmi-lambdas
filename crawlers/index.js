@@ -193,6 +193,7 @@ class Crawler {
     }
 
     async crawlArticles(){
+        let func = this.crawlArticles.name
         try {
             console.log("###################################")
             console.log('Calling function', func)
