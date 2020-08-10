@@ -13,6 +13,8 @@ const functionName = process.argv[2];
             await crawl.crawlArticles()
         }else if(functionName === "storeToMysql"){
             await crawl.storeToMysql()
+        }else if(functionName === "requeueArticles"){
+            await crawl.requeueArticles()
         }else{
             console.log('Function is undefined')
             process.exit()

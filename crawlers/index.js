@@ -466,6 +466,65 @@ class Crawler {
             throw Error(error)
         }
     }
+
+    async requeueArticles(){
+        let func = this.requeueArticles.name
+        try {
+            console.log("###################################")
+            console.log('Calling function', func)
+            console.log("###################################")   
+            let countProcessing = await fetch(source_enpoint+'article/count', 'POST', headers, {article_status: "Processing"})
+            let processingArticles = await fetch(source_enpoint+"article?article_status=Processing&limit="+countProcessing.data.result, 'GET', headers) 
+            let mapArticles = _.shuffle(processingArticles.data)
+            console.log('Total Processing',mapArticles.length)
+
+            let tasks = async.queue(function(task, callback){
+                let timeout = 200
+                setTimeout(() => {
+                    if(task.article_url && task.article_content){
+                        fetch(source_enpoint+'article/'+task._id, 'PUT', headers, {
+                            article_status: "Done",
+                            is_in_mysql: false,
+                            date_updated: new Date()
+                        }).then(response=>{
+                            console.log(response)
+                            callback()
+                        }).catch(error=>{
+                            console.error(error)
+                            callback()
+                        })
+                    }else{
+                        fetch(source_enpoint+'article/'+task._id, 'PUT', headers, {
+                            article_status: "Queued",
+                            date_updated: new Date()
+                        }).then(response=>{
+                            console.log(response)
+                            callback()
+                        }).catch(error=>{
+                            console.error(error)
+                            callback()
+                        })
+                    }
+                    
+                }, timeout);
+            }, 10)
+
+            mapArticles.forEach(element=>{
+                tasks.push(element)
+            })
+
+            tasks.error(function(err, task) {
+                console.log(task.article_url, err)
+            })
+
+            tasks.drain(function(){
+                console.log('Done.')
+            })
+
+        } catch (error) {
+            throw Error(error)
+        }
+    }
 }
 
 async function fetch(uri, method, headers, body) {
