@@ -27,7 +27,7 @@ UrlHelper.prototype.HOME_URL = async function(){
 }
 
 UrlHelper.prototype.FQDN = async function() {
-    return new URL(this._url).hostname
+    return new URL(this._url).hostname.replace(/^www./g, '')
 }
 
 UrlHelper.prototype.USER_AGENT = async function(){

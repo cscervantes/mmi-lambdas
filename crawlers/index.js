@@ -16,7 +16,7 @@ const headers = {
     "Authorization": "Bearer "+process.env.BEARER_TOKEN
 }
 
-const { url_helper, html_helper, article_url, media_value_helper } = require('../mmi_modules')
+const { url_helper, html_helper, article_url, media_value_helper, transaction_helper } = require('../mmi_modules')
 
 const status = process.env.STATUS || "ACTIVE"
 const website_type = process.env.WEBSITE_TYPE || "LOCAL_NEWS"
@@ -521,6 +521,370 @@ class Crawler {
                 console.log('Done.')
             })
 
+        } catch (error) {
+            throw Error(error)
+        }
+    }
+
+    async parseArticle(context){
+        let func = this.parseArticle.name
+        try {
+            let body = {}
+            console.log('Calling function', func)
+            // console.log(context)
+            if(context.hasOwnProperty('_id')){
+                
+                console.log('Coming from system', context.article_url)
+
+                const request_source = context.website.request_source
+
+                const home_url = context.website.website_url
+
+                const includeSearch = context.website.needs_search_params
+                
+                const startHttps = context.website.needs_https
+
+                const endSlash = context.website.needs_endslash
+
+                const selectors = context.website.selectors
+
+                const code = context.website.code_snippet
+
+                const is_using_selectors = JSON.parse(context.website.is_using_selectors)
+
+                const is_using_snippets = JSON.parse(context.website.is_using_snippets)
+
+                const website_cost = context.website.website_cost
+
+                const global_rank = context.website.alexa_rankings.global
+
+                const local_rank = context.website.alexa_rankings.local
+
+                const _uri = new url_helper(context.article_url, request_source, includeSearch, startHttps, endSlash)
+
+                const _uri_response = await _uri.MAKE_REQUEST()
+
+                const url = await _uri.FORMATTED_URL()
+
+                const _htm = new html_helper(_uri_response, home_url, includeSearch, startHttps, endSlash)
+
+                const _raw_html = await _htm.HTML()
+
+                if(is_using_selectors){
+
+                    const _article = new article_helper(_raw_html, selectors)
+    
+                    const title = await _article.ARTICLE_TITLE()
+    
+                    const date = await _article.ARTICLE_PUBLISH()
+    
+                    const author = await _article.ARTICLE_AUTHOR()
+    
+                    const section = await _article.ARTICLE_SECTION()
+    
+                    // const html = await _article.ARTICLE_HTML()
+    
+                    const text = await _article.ARTICLE_TEXT()
+    
+                    const image = await _article.ARTICLE_IMAGE()
+    
+                    const video = await _article.ARTICLE_VIDEO()
+    
+                    const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+    
+                    const advalue = values.advalue
+    
+                    const prvalue = values.prvalue
+    
+                    body.article_url = url
+    
+                    body.article_title = title
+    
+                    body.article_authors = author
+    
+                    body.article_publish_date = date
+    
+                    body.article_sections = section
+    
+                    body.article_content = text
+    
+                    body.article_images = image
+    
+                    body.article_videos = video
+    
+                    body.article_ad_value = advalue
+    
+                    body.article_pr_value = prvalue
+    
+                    body.article_status = 'Done'
+    
+                    body.article_language = $franc(text)
+
+                    body.date_updated = new Date()
+    
+                }else if(is_using_snippets){
+    
+                    const Snippet = module.exports = Function(code)()
+    
+                    const _article = new Snippet(_raw_html, $string, $moment, url)
+    
+                    const title = await _article.ARTICLE_TITLE()
+    
+                    const date = await _article.ARTICLE_PUBLISH()
+    
+                    const author = await _article.ARTICLE_AUTHOR()
+    
+                    const section = await _article.ARTICLE_SECTION()
+    
+                    // const html = await _article.ARTICLE_HTML()
+    
+                    const text = await _article.ARTICLE_TEXT()
+    
+                    const image = await _article.ARTICLE_IMAGE()
+    
+                    const video = await _article.ARTICLE_VIDEO()
+    
+                    const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+                    
+                    const advalue = values.advalue
+    
+                    const prvalue = values.prvalue
+    
+                    body.article_url = url
+    
+                    body.article_title = title
+    
+                    body.article_authors = author
+    
+                    body.article_publish_date = date
+    
+                    body.article_sections = section
+    
+                    body.article_content = text
+    
+                    body.article_images = image
+    
+                    body.article_videos = video
+    
+                    body.article_ad_value = advalue
+    
+                    body.article_pr_value = prvalue
+    
+                    body.article_status = 'Done'
+    
+                    body.article_language = $franc(text)
+
+                    body.date_updated = new Date()
+    
+                }else{
+
+                    body.article_status = "Error"
+
+                    body.article_error_status = 'Selectors and Snippets are not configured!'
+
+                    body.date_updated = new Date()
+                }
+
+                return body
+
+            }else{
+                
+                console.log('Only Article Url', context.article_url)
+
+                let _article_url = (context.article_url.indexOf('%') != -1 ) ? decodeURI(context.article_url) : context.article_url
+
+                let check_if_exist = await transaction_helper.CHECK_DOMAIN(_article_url)
+
+                if(check_if_exist.data > 0){
+
+                    let get_website = await transaction_helper.GET_WEBSITE(_article_url)
+
+                    let urlHelper = new url_helper(_article_url, get_website.request_source, get_website.needs_search_params, get_website.needs_https, get_website.needs_endslash)
+
+                    let clean_url = await urlHelper.FORMATTED_URL()
+
+                    body.website = get_website._id
+
+                    body.article_source_url = get_website.fqdn
+
+                    body.article_url = clean_url
+
+                    if(!context.hasOwnProperty('section')){
+
+                        let check_section = await transaction_helper.CHECK_SECTION(get_website.website_url)
+    
+                        if(check_section.data > 0){
+    
+                            let get_section = await transaction_helper.GET_SECTION(get_website.website_url)
+    
+                            body.section = get_section._id
+    
+                        }else{
+    
+                            body.section_url = get_website.website_url
+    
+                            body.website = get_website._id
+    
+                            let storeSection = await transaction_helper.STORE_SECTION(body)
+    
+                            body.section = storeSection.data._id
+    
+                        }
+    
+                    }
+
+                    const request_source = get_website.request_source
+
+                    const home_url = get_website.website_url
+
+                    const includeSearch = get_website.needs_search_params
+                    
+                    const startHttps = get_website.needs_https
+
+                    const endSlash = get_website.needs_endslash
+
+                    const selectors = get_website.selectors
+
+                    const code = get_website.code_snippet
+
+                    const is_using_selectors = JSON.parse(get_website.is_using_selectors)
+
+                    const is_using_snippets = JSON.parse(get_website.is_using_snippets)
+
+                    const website_cost = get_website.website_cost
+
+                    const global_rank = get_website.alexa_rankings.global
+
+                    const local_rank = get_website.alexa_rankings.local
+
+                    const _uri = new url_helper(clean_url, request_source, includeSearch, startHttps, endSlash)
+
+                    const _uri_response = await _uri.MAKE_REQUEST()
+
+                    const url = await _uri.FORMATTED_URL()
+
+                    const _htm = new html_helper(_uri_response, home_url, includeSearch, startHttps, endSlash)
+
+                    const _raw_html = await _htm.HTML()
+
+                    if(is_using_selectors){
+
+                        const _article = new article_helper(_raw_html, selectors)
+
+                        const title = await _article.ARTICLE_TITLE()
+
+                        const date = await _article.ARTICLE_PUBLISH()
+
+                        const author = await _article.ARTICLE_AUTHOR()
+
+                        const section = await _article.ARTICLE_SECTION()
+
+                        // const html = await _article.ARTICLE_HTML()
+
+                        const text = await _article.ARTICLE_TEXT()
+
+                        const image = await _article.ARTICLE_IMAGE()
+
+                        const video = await _article.ARTICLE_VIDEO()
+
+                        const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+
+                        const advalue = values.advalue
+
+                        const prvalue = values.prvalue
+
+                        body.article_url = url
+
+                        body.article_title = title
+
+                        body.article_authors = author
+
+                        body.article_publish_date = date
+
+                        body.article_sections = section
+
+                        body.article_content = text
+
+                        body.article_images = image
+
+                        body.article_videos = video
+
+                        body.article_ad_value = advalue
+
+                        body.article_pr_value = prvalue
+
+                        body.article_status = 'Done'
+
+                        body.article_language = $franc(text)
+
+                    }else if(is_using_snippets){
+
+                        const Snippet = module.exports = Function(code)()
+
+                        const _article = new Snippet(_raw_html, $string, $moment, url)
+
+                        const title = await _article.ARTICLE_TITLE()
+
+                        const date = await _article.ARTICLE_PUBLISH()
+
+                        const author = await _article.ARTICLE_AUTHOR()
+
+                        const section = await _article.ARTICLE_SECTION()
+
+                        // const html = await _article.ARTICLE_HTML()
+
+                        const text = await _article.ARTICLE_TEXT()
+
+                        const image = await _article.ARTICLE_IMAGE()
+
+                        const video = await _article.ARTICLE_VIDEO()
+
+                        const values = await media_value_helper(global_rank, local_rank, website_cost, text, image, video)
+                        
+                        const advalue = values.advalue
+
+                        const prvalue = values.prvalue
+
+                        body.article_url = url
+
+                        body.article_title = title
+
+                        body.article_authors = author
+
+                        body.article_publish_date = date
+
+                        body.article_sections = section
+
+                        body.article_content = text
+
+                        body.article_images = image
+
+                        body.article_videos = video
+
+                        body.article_ad_value = advalue
+
+                        body.article_pr_value = prvalue
+
+                        body.article_status = 'Done'
+
+                        body.article_language = $franc(text)
+
+                    }else{
+
+                        body.article_status = "Error"
+
+                        body.article_error_status = 'Selectors and Snippets are not configured!'
+    
+                        body.date_updated = new Date()
+
+                    }
+
+                    return body
+
+                }else{
+                    console.log('Website is not in monitoring!')
+                }
+            }
         } catch (error) {
             throw Error(error)
         }

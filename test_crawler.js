@@ -7,7 +7,10 @@ const Crawler = require('./crawlers');
         // await crawl.crawlActiveWebsites()
         // await crawl.storeToMysql()
         // await crawl.crawlArticles()
-        await crawl.requeueArticles()
+        // await crawl.requeueArticles()
+        await crawl.parseArticle({
+            article_url: "https://tass.com/world/1189075"
+        })
     } catch (error) {
         console.error(error)
     }
