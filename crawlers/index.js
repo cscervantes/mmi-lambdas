@@ -426,8 +426,9 @@ class Crawler {
             console.log("###################################")
             console.log('Calling function', func)
             console.log("###################################")
-            let article_source_from = "NodeJS Static Scraper"
-            let result = await fetch(source_enpoint+`article?is_in_mysql=false&article_status=Done&article_source_from=${article_source_from}&limit=1000`, 'GET', headers)
+            // let article_source_from = "NodeJS Static Scraper"
+            // let result = await fetch(source_enpoint+`article?is_in_mysql=false&article_status=Done&article_source_from=${article_source_from}&limit=1000`, 'GET', headers)
+            let result = await fetch(source_enpoint+`article?is_in_mysql=false&article_status=Done&limit=1000`, 'GET', headers)
             console.log(result.data.length)
             Promise.allSettled(result.data.map(async v => {
                 let countMedia = await fetch(source_enpoint+'media/count', 'POST', headers, {mwe_full_url: v.article_url})
