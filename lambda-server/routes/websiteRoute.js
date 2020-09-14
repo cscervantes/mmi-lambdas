@@ -62,12 +62,29 @@ module.exports = function(name, router){
             let $ = await _htm.HTML()
 
             let icos = $('link').filter((i,e)=>{
-               return $(e).attr('href').search(/\.ico$/gi) != -1 || $(e).attr('href').search(/icon/gi) != -1 || $(e).attr('href').search(/ico/gi) != -1
+                if($(e).attr('rel')){
+                    return $(e).attr('rel').search(/icon$/g) != -1 || $(e).attr('rel').search(/shortcut/g) != -1
+                }
+            //    return $(e).attr('href').search(/\.ico$/gi) != -1 || $(e).attr('href').search(/icon/gi) != -1 || $(e).attr('href').search(/ico/gi) != -1  
             }).get()
 
             const base = $('base').attr('href') || _uri_origin
             
-            const fav_icon = icos.map(v=>base+$(v).attr('href')).slice(0)[0]
+            // const fav_icon = icos.map(v=>base+$(v).attr('href')).slice(0)[0]
+            const fav_icon = icos.map(v=>{
+                let _fvcon = $(v).attr('href')
+                if(_fvcon){
+                    if(_fvcon.startsWith('//')){
+                        return 'http:'+_fvcon
+                    }else if(_fvcon.startsWith('/')){
+                        return base+_fvcon
+                    }else{
+                        return _fvcon
+                    }
+                }else{
+                    return ''
+                }
+            }).filter(v=>v).slice(0)[0]
 
             const title = ($('title').length > 0) ? $('title').text() : $('meta[property="og:title"]').attr('content')
 

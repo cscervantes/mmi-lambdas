@@ -1,5 +1,5 @@
 const fs = require('fs')
-const dir = process.env.OLDPWD+'/mmi-lambdas/mmi_modules/cnt_lang_helper'
+const dir = process.env.PWD+'/mmi_modules/cnt_lang_helper'
 module.exports.country_lists = async function(needle){
     const promise = new Promise((resolve, reject) => {
         try {
