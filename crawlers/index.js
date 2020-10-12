@@ -428,8 +428,11 @@ class Crawler {
             console.log("###################################")
             // let article_source_from = "NodeJS Static Scraper"
             // let result = await fetch(source_enpoint+`article?is_in_mysql=false&article_status=Done&article_source_from=${article_source_from}&limit=1000`, 'GET', headers)
-            let result = await fetch(source_enpoint+`article?is_in_mysql=false&article_status=Done&limit=1000`, 'GET', headers)
-            console.log(result.data.length)
+            // let result = await fetch(source_enpoint+`article?is_in_mysql=false&article_status=Done&article_publish_date=&limit=1000`, 'GET', headers)
+            let result = await fetch(source_enpoint+`article/custom_query?limit=1000`, 'POST', headers, {
+                "is_in_mysql": false,
+                "article_status": "Done"
+            })
             Promise.allSettled(result.data.map(async v => {
                 let countMedia = await fetch(source_enpoint+'media/count', 'POST', headers, {mwe_full_url: v.article_url})
                 if(countMedia[0].total > 0){
@@ -490,8 +493,10 @@ class Crawler {
                         mwe_lang: v.article_language || 'en'
                     })
 
+                    // console.log(insert_raw)
+
                     if(insert_raw.affectedRows > 0){
-                        await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true})
+                        await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true, article_publish_date: v.article_publish_date || v.date_created})
                     }
                 }
             }))
