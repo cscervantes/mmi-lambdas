@@ -437,35 +437,61 @@ class Crawler {
                     await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true})
                 }else{
                     // inser to media_web_raw
-                    if(v.article_publish_date){
-                        let insert_raw = await fetch(source_enpoint+'media/insert_raw', 'POST', headers, {
-                            mwe_src_url: v.article_source_url,
-                            mwe_src_aut_full_name: (v.article_authors.length > 0 ) ? JSON.stringify(Object.assign({}, v.article_authors)) : JSON.stringify({"0":"No - Author"}),
-                            mwe_src_aut_first_name: '',
-                            mwe_src_aut_last_name: '',
-                            mwe_src_med_type: 'Web',
-                            mwe_full_url: v.article_url,
-                            mwe_content: v.article_content,
-                            mwe_title: v.article_title,
-                            mwe_section: v.article_sections.join(', '),
-                            mwe_val: v.article_ad_value,
-                            mwe_mod_val: v.article_pr_value,
-                            mwe_date: v.article_publish_date,
-                            mwe_datetime: v.article_publish_date,
-                            mwe_img_vid_url: JSON.stringify({
-                                img: v.article_images,
-                                vid: v.article_videos
-                            }),
-                            mwe_pub_name: v.website.website_name,
-                            mwe_pub_cc: v.website.country_code,
-                            mwe_lang: v.article_language || 'en'
-                        })
+                    // if(v.article_publish_date){
+                    //     let insert_raw = await fetch(source_enpoint+'media/insert_raw', 'POST', headers, {
+                    //         mwe_src_url: v.article_source_url,
+                    //         mwe_src_aut_full_name: (v.article_authors.length > 0 ) ? JSON.stringify(Object.assign({}, v.article_authors)) : JSON.stringify({"0":"No - Author"}),
+                    //         mwe_src_aut_first_name: '',
+                    //         mwe_src_aut_last_name: '',
+                    //         mwe_src_med_type: 'Web',
+                    //         mwe_full_url: v.article_url,
+                    //         mwe_content: v.article_content,
+                    //         mwe_title: v.article_title,
+                    //         mwe_section: v.article_sections.join(', '),
+                    //         mwe_val: v.article_ad_value,
+                    //         mwe_mod_val: v.article_pr_value,
+                    //         mwe_date: v.article_publish_date || v.date_created,
+                    //         mwe_datetime: v.article_publish_date || v.date_created,
+                    //         mwe_img_vid_url: JSON.stringify({
+                    //             img: v.article_images,
+                    //             vid: v.article_videos
+                    //         }),
+                    //         mwe_pub_name: v.website.website_name,
+                    //         mwe_pub_cc: v.website.country_code,
+                    //         mwe_lang: v.article_language || 'en'
+                    //     })
 
-                        if(insert_raw.affectedRows > 0){
-                            await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true})
-                        }
-                    }else{
-                        console.log(v.article_url, ' has null article_publish_date value.')
+                    //     if(insert_raw.affectedRows > 0){
+                    //         await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true})
+                    //     }
+                    // }else{
+                    //     console.log(v.article_url, ' has null article_publish_date value.')
+                    // }
+                    let insert_raw = await fetch(source_enpoint+'media/insert_raw', 'POST', headers, {
+                        mwe_src_url: v.article_source_url,
+                        mwe_src_aut_full_name: (v.article_authors.length > 0 ) ? JSON.stringify(Object.assign({}, v.article_authors)) : JSON.stringify({"0":"No - Author"}),
+                        mwe_src_aut_first_name: '',
+                        mwe_src_aut_last_name: '',
+                        mwe_src_med_type: 'Web',
+                        mwe_full_url: v.article_url,
+                        mwe_content: v.article_content,
+                        mwe_title: v.article_title,
+                        mwe_section: v.article_sections.join(', '),
+                        mwe_val: v.article_ad_value,
+                        mwe_mod_val: v.article_pr_value,
+                        mwe_date: v.article_publish_date || v.date_created,
+                        mwe_datetime: v.article_publish_date || v.date_created,
+                        mwe_img_vid_url: JSON.stringify({
+                            img: v.article_images,
+                            vid: v.article_videos
+                        }),
+                        mwe_pub_name: v.website.website_name,
+                        mwe_pub_cc: v.website.country_code,
+                        mwe_lang: v.article_language || 'en'
+                    })
+
+                    if(insert_raw.affectedRows > 0){
+                        await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true})
                     }
                 }
             }))
