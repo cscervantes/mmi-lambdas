@@ -433,6 +433,7 @@ class Crawler {
                 "is_in_mysql": false,
                 "article_status": "Done"
             })
+            console.log('Article to sync',result.data.length)
             Promise.allSettled(result.data.map(async v => {
                 let countMedia = await fetch(source_enpoint+'media/count', 'POST', headers, {mwe_full_url: v.article_url})
                 if(countMedia[0].total > 0){
