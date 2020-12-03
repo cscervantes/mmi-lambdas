@@ -429,9 +429,15 @@ class Crawler {
             // let article_source_from = "NodeJS Static Scraper"
             // let result = await fetch(source_enpoint+`article?is_in_mysql=false&article_status=Done&article_source_from=${article_source_from}&limit=1000`, 'GET', headers)
             // let result = await fetch(source_enpoint+`article?is_in_mysql=false&article_status=Done&article_publish_date=&limit=1000`, 'GET', headers)
-            let result = await fetch(source_enpoint+`article/custom_query?limit=1000`, 'POST', headers, {
+            let result = await fetch(source_enpoint+`article/custom_query?limit=10000`, 'POST', headers, {
                 "is_in_mysql": false,
-                "article_status": "Done"
+                "article_status": "Done",
+                "article_source_url": {
+                    "$ne": null
+                },
+                "article_publish_date": {
+                    "$ne": null
+                }
             })
             console.log('Article to sync',result.data.length)
             Promise.allSettled(result.data.map(async v => {
@@ -480,7 +486,7 @@ class Crawler {
                         mwe_full_url: v.article_url,
                         mwe_content: v.article_content,
                         mwe_title: v.article_title,
-                        mwe_section: v.article_sections.join(', '),
+                        mwe_section: (v.article_sections.length > 0) ? v.article_sections.join(', ') : "News",
                         mwe_val: v.article_ad_value,
                         mwe_mod_val: v.article_pr_value,
                         mwe_date: v.article_publish_date || v.date_created,
@@ -494,7 +500,7 @@ class Crawler {
                         mwe_lang: v.article_language || 'en'
                     })
 
-                    // console.log(insert_raw)
+                    console.log(insert_raw)
 
                     if(insert_raw.affectedRows > 0){
                         await fetch(source_enpoint+'article/'+v._id,"PUT",headers,{"is_in_mysql": true, article_publish_date: v.article_publish_date || v.date_created})
