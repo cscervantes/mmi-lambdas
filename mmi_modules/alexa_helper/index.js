@@ -66,7 +66,7 @@ class Alexa {
         let $ = await this.fetchAlexa()
         const promise = new Promise((resolve, reject)=>{
             try {
-                let country = 'Philippines'
+                let country = 'Unknown'
                 if($('#countrydropdown ul').length > 0){
                     country = $('#countrydropdown ul').removeAttr('style').children('li').not('span').eq(0).text()
                     country = country.replace(/[^a-zA-Z]/g, '').split(/(?=[A-Z])/g).join(' ')
@@ -75,7 +75,7 @@ class Alexa {
                 resolve(country)
             } catch (error) {
                 // console.log(error)
-                reject('Philippines')
+                reject('Unknown')
             }
         })
         return promise
@@ -95,7 +95,7 @@ module.exports = async (fqdn) => {
             reject({
                 'global': 0,
                 'local': 0,
-                'country': 'Philippines'
+                'country': 'Unknown'
             })
         }
     })

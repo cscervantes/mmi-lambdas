@@ -2486,6 +2486,17 @@
         "gdp_usd": "175.5 Billion"
     },
     {
+        "country": "Unknown",
+        "country_code": "0",
+        "iso_codes": [
+            "No",
+            "NoC"
+        ],
+        "population": "0",
+        "area_km3": "0",
+        "gdp_usd": "0 Billion"
+    },
+    {
         "country": "United Arab Emirates",
         "country_code": "971",
         "iso_codes": [
