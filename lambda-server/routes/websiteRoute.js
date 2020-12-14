@@ -157,4 +157,12 @@ module.exports = function(name, router){
         }
     })
 
+    router.post(name+'/country_iso', async function(req, res, next){
+        try {
+            res.status(200).send(await country_language_helper.country_lists(req.body.country))
+        } catch (error) {
+            next(error)
+        }
+    })
+
 }
