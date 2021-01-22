@@ -3,6 +3,8 @@
  */
 
 const { $request, $string, $cheerio } = require('../npm_mods')
+const { country_lists, language_lists } = require('../cnt_lang_helper')
+const dns = require('dns')
 
 class Alexa {
     constructor(fqdn){
@@ -12,70 +14,121 @@ class Alexa {
     async fetchAlexa(){
         const promise = new Promise((resolve, reject)=>{
             try {
-                let alexaUrl = 'http://www.alexa.com/siteinfo/'+this._fqdn
-                $request.get(alexaUrl, (err, resp, body)=>{
+                // let alexaUrl = 'http://www.alexa.com/siteinfo/'+this._fqdn
+                let alexaUrl = 'http://data.alexa.com/data?cli=10&dat=snbamz&url='+this._fqdn
+                $request.get(alexaUrl, async (err, resp, body)=>{
                     if(err) reject(err);
-                    else resolve($cheerio.load(body))
+                    else {
+                        let $ = $cheerio.load(body, {decodeEntities:true, xmlMode:true})
+
+                        let websiteName = $string(this._fqdn.split('.')[0]).humanize().s
+
+                        let globalRank = 0
+
+                        let localRank = 0
+                        
+                        let country = 'Unknown'
+                        
+                        let delta = 0
+
+                        let reach = 0
+                        
+                        let relatedLinks = []
+
+                        let title = $('SD TITLE')
+
+                        let owner = $('SD OWNER')
+
+                        let sd = $('SD POPULARITY')
+
+                        let rls = $('RLS RL')
+
+                        let ct = $('SD COUNTRY')
+
+                        let dlt = $('SD RANK')
+                        
+                        let rc = $('SD REACH')
+
+                        if(dlt.length > 0){
+                            delta = parseInt(dlt.attr('DELTA'))
+                        }
+
+                        if(rc.length > 0){
+                            reach = parseInt(rc.attr('RANK'))
+                        }
+
+                        if(title.length>0){
+                            websiteName = title.attr('TEXT')
+                        }else if(owner.length>0){
+                            websiteName = owner.attr('NAME')
+                        }
+
+                        if(sd.length > 0){
+                            globalRank = parseInt(sd.eq(0).attr('TEXT'))
+                        }
+
+                        if(ct.length > 0){
+                            country = ct.eq(0).attr('NAME')
+                            localRank = parseInt(ct.eq(0).attr('RANK'))
+                        }
+
+                        if(rls.length > 0){
+                            relatedLinks = rls.map((i,e)=>{
+                                return $(e).attr('HREF').replace(/\/$/g, '').trim().replace(/^www\./g, '').trim().split('/')[0].trim()
+                            }).get()
+                        }
+
+                        let fqdn = this._fqdn
+
+                        if(country === 'Unknown'){
+                            country = await this.geolocation()
+                        }
+
+                        let country_code = await country_lists(country)
+
+                        resolve({globalRank,localRank,country, websiteName, relatedLinks, fqdn, country_code, delta, reach})
+
+                    }
                 })
             } catch (error) {
+                // console.log(error)
                 reject(error)
             }
         })
         return promise
     }
 
-    async globalRank() {
-        let $ = await this.fetchAlexa()
-        const promise = new Promise((resolve, reject)=>{
+    async ip(){
+        const promise = new Promise(async(resolve, reject)=>{
             try {
-                let rank = 0
-                if($('div#card_rank section.rank .rank-global p.big.data').length > 0){
-                    rank = $('div#card_rank section.rank .rank-global p.big.data').not('span.hash').text()
-                    rank = rank.replace(/[^0-9]/g, '').trim()
-                    rank = parseInt(rank)
-                }
-                resolve(rank)
+                const ip = dns.lookup(this._fqdn, (err, addresses, family) => {
+                    if(err){
+                        reject(err)
+                    }else{
+                        resolve(addresses)
+                    }
+                })
             } catch (error) {
-                // console.log(error)
-                reject(0)
+                reject(error)
             }
         })
+
         return promise
     }
 
-    async localRank() {
-        let $ = await this.fetchAlexa()
-        const promise = new Promise((resolve, reject)=>{
+    async geolocation(){
+        const promise = new Promise(async(resolve, reject)=>{
             try {
-                let rank = 0
-                if($('#countrydropdown ul').length > 0){
-                    rank = $('#countrydropdown ul').removeAttr('style').children('li').eq(0).attr('data-value')
-                    rank = rank.replace(/[^0-9]/g, '').trim()
-                    rank = parseInt(rank)
-                }
-                resolve(rank)
+                let geolocationUrl = 'https://ipgeolocation.abstractapi.com/v1/?api_key=f4b61e710fd846c48350bd35faacfc51&ip_address='+await this.ip()
+                $request.get(geolocationUrl,{headers: {"Content-Type": "application/json", "Origin": "https://www.abstractapi.com", "Referer": "https://www.abstractapi.com/"}}, async (err, resp, body)=>{
+                    if(err){
+                        reject(err)
+                    }else{
+                        resolve(body.country)
+                    }
+                })
             } catch (error) {
-                // console.log(error)
-                reject(0)
-            }
-        })
-        return promise
-    }
-
-    async originCountry(){
-        let $ = await this.fetchAlexa()
-        const promise = new Promise((resolve, reject)=>{
-            try {
-                let country = 'Unknown'
-                if($('#countrydropdown ul').length > 0){
-                    country = $('#countrydropdown ul').removeAttr('style').children('li').not('span').eq(0).text()
-                    country = country.replace(/[^a-zA-Z]/g, '').split(/(?=[A-Z])/g).join(' ')
-                    country = country.trim()
-                }
-                resolve(country)
-            } catch (error) {
-                // console.log(error)
-                reject('Unknown')
+                reject(error)
             }
         })
         return promise
@@ -87,15 +140,30 @@ module.exports = async (fqdn) => {
     const promise = new Promise(async(resolve, reject)=>{
         try {
             const alexa = new Alexa(fqdn)
-            const global = await alexa.globalRank()
-            const local = await alexa.localRank()
-            const country = await alexa.originCountry()
-            resolve({global,local,country})
+            const rank = await alexa.fetchAlexa()
+            const global = rank.globalRank
+            const local =  rank.localRank
+            const country = rank.country
+            const country_code = rank.country_code
+            const name = rank.websiteName
+            const similar_websites = rank.relatedLinks
+            const domain = rank.fqdn
+            const home_url = `http://${fqdn}`
+            const delta = rank.delta
+            const reach = rank.reach
+            resolve({name, home_url, domain, country, country_code, global,local, similar_websites, delta, reach})
         } catch (error) {
             reject({
                 'global': 0,
                 'local': 0,
-                'country': 'Unknown'
+                'delta': 0,
+                'reach': 0,
+                'country': 'Unknown',
+                'country_code': 'NoC',
+                'domain': fqdn.replace(/^www\./g, '').trim(),
+                'name': $string(fqdn.replace(/^www\./g, '').trim().split('.')[0]).humanize().s,
+                'home_url': `http://${fqdn.replace(/^www\./g, '').trim()}`,
+                'similar_websites': []
             })
         }
     })
