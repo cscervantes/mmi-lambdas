@@ -32,7 +32,6 @@ module.exports.country_extension_lists = async function(needle){
     const promise = new Promise((resolve, reject) => {
         try {
             let countries = JSON.parse(fs.readFileSync(dir+'/country_extension_lists.json', 'utf-8'))
-            console.log(countries)
             let ext = countries.find(({extension}) => extension.search(new RegExp(`${needle}`, 'gi')) != -1)
             resolve(ext.country || null)
         } catch (error) {

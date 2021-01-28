@@ -2453,6 +2453,17 @@
         "gdp_usd": "38 Million"
     },
     {
+        "country": "United States",
+        "country_code": "1",
+        "iso_codes": [
+            "US",
+            "USA"
+        ],
+        "population": "310,232,863",
+        "area_km3": "9,629,091",
+        "gdp_usd": "16.72 Trillion"
+    },
+    {
         "country": "United States Virgin Islands",
         "country_code": "1-340",
         "iso_codes": [
@@ -2517,17 +2528,6 @@
         "population": "62,348,447",
         "area_km3": "244,820",
         "gdp_usd": "2.49 Trillion"
-    },
-    {
-        "country": "United States of America",
-        "country_code": "1",
-        "iso_codes": [
-            "US",
-            "USA"
-        ],
-        "population": "310,232,863",
-        "area_km3": "9,629,091",
-        "gdp_usd": "16.72 Trillion"
     },
     {
         "country": "Uruguay",
