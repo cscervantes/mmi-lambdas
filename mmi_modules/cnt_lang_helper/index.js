@@ -33,10 +33,10 @@ module.exports.country_extension_lists = async function(needle){
         try {
             let countries = JSON.parse(fs.readFileSync(dir+'/country_extension_lists.json', 'utf-8'))
             let ext = countries.find(({extension}) => extension.search(new RegExp(`${needle}`, 'gi')) != -1)
-            resolve(ext.country || null)
+            resolve(ext.country || 'Unknown')
         } catch (error) {
             // console.log(error)
-            reject(null)
+            resolve('Unknown')
         }
     })
     return promise

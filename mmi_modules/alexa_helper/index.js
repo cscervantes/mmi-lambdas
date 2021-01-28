@@ -84,10 +84,12 @@ class Alexa {
                         if(country === 'Unknown'){
                             let ext = fqdn.split('.').splice(-1)
                             country = await country_extension_lists('.'+ext)
-                        }else if(!country){
-                            country = await this.geolocation()
                         }
 
+                        if(country === 'Unknown'){
+                            country = await this.geolocation()
+                        }
+                        
                         let country_code = await country_lists(country)
 
                         resolve({globalRank,localRank,country, websiteName, relatedLinks, fqdn, country_code, delta, reach})
