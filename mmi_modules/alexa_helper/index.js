@@ -3,8 +3,9 @@
  */
 
 const { $request, $string, $cheerio } = require('../npm_mods')
-const { country_lists, language_lists } = require('../cnt_lang_helper')
+const { country_lists, country_extension_lists } = require('../cnt_lang_helper')
 const dns = require('dns')
+const { count } = require('console')
 
 class Alexa {
     constructor(fqdn){
@@ -81,6 +82,9 @@ class Alexa {
                         let fqdn = this._fqdn
 
                         if(country === 'Unknown'){
+                            let ext = fqdn.split('.').splice(-1)
+                            country = await country_extension_lists('.'+ext)
+                        }else if(!country){
                             country = await this.geolocation()
                         }
 

@@ -1,0 +1,1018 @@
+[
+    {
+        "country": "Ascension Island",
+        "extension": ".ac"
+    },
+    {
+        "country": "Andorra",
+        "extension": ".ad"
+    },
+    {
+        "country": "United Arab Emirates",
+        "extension": ".ae"
+    },
+    {
+        "country": "Afghanistan",
+        "extension": ".af"
+    },
+    {
+        "country": "Antigua & Barbuda",
+        "extension": ".ag"
+    },
+    {
+        "country": "Anguilla",
+        "extension": ".ai"
+    },
+    {
+        "country": "Albania",
+        "extension": ".al"
+    },
+    {
+        "country": "Armenia",
+        "extension": ".am"
+    },
+    {
+        "country": "Netherlands Antilles",
+        "extension": ".an"
+    },
+    {
+        "country": "Angola",
+        "extension": ".ao"
+    },
+    {
+        "country": "Antarctica",
+        "extension": ".aq"
+    },
+    {
+        "country": "Argentina",
+        "extension": ".ar"
+    },
+    {
+        "country": "American Samoa",
+        "extension": ".as"
+    },
+    {
+        "country": "Austria",
+        "extension": ".at"
+    },
+    {
+        "country": "Australia",
+        "extension": ".au"
+    },
+    {
+        "country": "Aruba",
+        "extension": ".aw"
+    },
+    {
+        "country": "Aland",
+        "extension": ".ax"
+    },
+    {
+        "country": "Azerbaijan",
+        "extension": ".az"
+    },
+    {
+        "country": "Bosnia & Herzegovina",
+        "extension": ".ba"
+    },
+    {
+        "country": "Barbados",
+        "extension": ".bb"
+    },
+    {
+        "country": "Bangladesh",
+        "extension": ".bd"
+    },
+    {
+        "country": "Belgium",
+        "extension": ".be"
+    },
+    {
+        "country": "Burkina Faso",
+        "extension": ".bf"
+    },
+    {
+        "country": "Bulgaria",
+        "extension": ".bg"
+    },
+    {
+        "country": "Bahrain",
+        "extension": ".bh"
+    },
+    {
+        "country": "Burundi",
+        "extension": ".bi"
+    },
+    {
+        "country": "Benin",
+        "extension": ".bj"
+    },
+    {
+        "country": "Bermuda",
+        "extension": ".bm"
+    },
+    {
+        "country": "Brunei",
+        "extension": ".bn"
+    },
+    {
+        "country": "Bolivia",
+        "extension": ".bo"
+    },
+    {
+        "country": "Bonaire",
+        "extension": ".bq"
+    },
+    {
+        "country": "Brazil",
+        "extension": ".br"
+    },
+    {
+        "country": "Bahamas",
+        "extension": ".bs"
+    },
+    {
+        "country": "Bhutan",
+        "extension": ".bt"
+    },
+    {
+        "country": "Bouvet Island",
+        "extension": ".bv"
+    },
+    {
+        "country": "Botswana",
+        "extension": ".bw"
+    },
+    {
+        "country": "Belarus Byelorussia",
+        "extension": ".by"
+    },
+    {
+        "country": "Belize",
+        "extension": ".bz"
+    },
+    {
+        "country": "Canada",
+        "extension": ".ca"
+    },
+    {
+        "country": "Cocos (Keeling) Islands",
+        "extension": ".cc"
+    },
+    {
+        "country": "Democratic Republic of the Congo",
+        "extension": ".cd"
+    },
+    {
+        "country": "Central African Republic",
+        "extension": ".cf"
+    },
+    {
+        "country": "Republic of the Congo",
+        "extension": ".cg"
+    },
+    {
+        "country": "Switzerland",
+        "extension": ".ch"
+    },
+    {
+        "country": "Cote d'Ivoire",
+        "extension": ".ci"
+    },
+    {
+        "country": "Cook Islands",
+        "extension": ".ck"
+    },
+    {
+        "country": "Chile",
+        "extension": ".cl"
+    },
+    {
+        "country": "Cameroon",
+        "extension": ".cm"
+    },
+    {
+        "country": "People's Republic of China",
+        "extension": ".cn"
+    },
+    {
+        "country": "Colombia",
+        "extension": ".co"
+    },
+    {
+        "country": "Costa Rica",
+        "extension": ".cr"
+    },
+    {
+        "country": "Czechoslovakia",
+        "extension": ".cs"
+    },
+    {
+        "country": "Cuba",
+        "extension": ".cu"
+    },
+    {
+        "country": "Cape Verde",
+        "extension": ".cv"
+    },
+    {
+        "country": "Curacao West Indies",
+        "extension": ".cw"
+    },
+    {
+        "country": "Christmas Island",
+        "extension": ".cx"
+    },
+    {
+        "country": "Cyprus",
+        "extension": ".cy"
+    },
+    {
+        "country": "Czech Republic",
+        "extension": ".cz"
+    },
+    {
+        "country": "East Germany",
+        "extension": ".dd"
+    },
+    {
+        "country": "Germany Deutschland",
+        "extension": ".de"
+    },
+    {
+        "country": "Djibouti",
+        "extension": ".dj"
+    },
+    {
+        "country": "Denmark",
+        "extension": ".dk"
+    },
+    {
+        "country": "Dominica",
+        "extension": ".dm"
+    },
+    {
+        "country": "Dominican Republic",
+        "extension": ".do"
+    },
+    {
+        "country": "Algeria",
+        "extension": ".dz"
+    },
+    {
+        "country": "Ecuador",
+        "extension": ".ec"
+    },
+    {
+        "country": "Estonia Eesti",
+        "extension": ".ee"
+    },
+    {
+        "country": "Egypt",
+        "extension": ".eg"
+    },
+    {
+        "country": "Western Sahara",
+        "extension": ".eh"
+    },
+    {
+        "country": "Eritrea",
+        "extension": ".er"
+    },
+    {
+        "country": "Spain",
+        "extension": ".es"
+    },
+    {
+        "country": "Ethiopia",
+        "extension": ".et"
+    },
+    {
+        "country": "European Union",
+        "extension": ".eu"
+    },
+    {
+        "country": "Finland",
+        "extension": ".fi"
+    },
+    {
+        "country": "Fiji",
+        "extension": ".fj"
+    },
+    {
+        "country": "Falkland Islands",
+        "extension": ".fk"
+    },
+    {
+        "country": "Federated States of Micronesia",
+        "extension": ".fm"
+    },
+    {
+        "country": "Faroe Islands",
+        "extension": ".fo"
+    },
+    {
+        "country": "France",
+        "extension": ".fr"
+    },
+    {
+        "country": "United Kingdom",
+        "extension": ".gb"
+    },
+    {
+        "country": "Grenada",
+        "extension": ".gd"
+    },
+    {
+        "country": "Georgia",
+        "extension": ".ge"
+    },
+    {
+        "country": "French Guiana",
+        "extension": ".gf"
+    },
+    {
+        "country": "Guernsey",
+        "extension": ".gg"
+    },
+    {
+        "country": "Ghana",
+        "extension": ".gh"
+    },
+    {
+        "country": "Gibraltar",
+        "extension": ".gi"
+    },
+    {
+        "country": "Greenland",
+        "extension": ".gl"
+    },
+    {
+        "country": "The Gambia",
+        "extension": ".gm"
+    },
+    {
+        "country": "Guinea",
+        "extension": ".gn"
+    },
+    {
+        "country": "Guadeloupe",
+        "extension": ".gp"
+    },
+    {
+        "country": "Equatorial Guinea",
+        "extension": ".gq"
+    },
+    {
+        "country": "Greece",
+        "extension": ".gr"
+    },
+    {
+        "country": "South Georgia & the South Sandwich Islands",
+        "extension": ".gs"
+    },
+    {
+        "country": "Guatemala",
+        "extension": ".gt"
+    },
+    {
+        "country": "Guam",
+        "extension": ".gu"
+    },
+    {
+        "country": "Guinea-Bissau",
+        "extension": ".gw"
+    },
+    {
+        "country": "Guyana",
+        "extension": ".gy"
+    },
+    {
+        "country": "Hong Kong",
+        "extension": ".hk"
+    },
+    {
+        "country": "Heard Island & McDonald Islands",
+        "extension": ".hm"
+    },
+    {
+        "country": "Honduras",
+        "extension": ".hn"
+    },
+    {
+        "country": "Croatia Hrvatska",
+        "extension": ".hr"
+    },
+    {
+        "country": "Haiti",
+        "extension": ".ht"
+    },
+    {
+        "country": "Hungary",
+        "extension": ".hu"
+    },
+    {
+        "country": "Indonesia",
+        "extension": ".id"
+    },
+    {
+        "country": "Ireland",
+        "extension": ".ie"
+    },
+    {
+        "country": "Israel",
+        "extension": ".il"
+    },
+    {
+        "country": "Isle of Man",
+        "extension": ".im"
+    },
+    {
+        "country": "India",
+        "extension": ".in"
+    },
+    {
+        "country": "British Indian Ocean Territory",
+        "extension": ".io"
+    },
+    {
+        "country": "Iran",
+        "extension": ".ir"
+    },
+    {
+        "country": "Iceland",
+        "extension": ".is"
+    },
+    {
+        "country": "Italy",
+        "extension": ".it"
+    },
+    {
+        "country": "Jersey",
+        "extension": ".je"
+    },
+    {
+        "country": "Jamaica",
+        "extension": ".jm"
+    },
+    {
+        "country": "Jordan",
+        "extension": ".jo"
+    },
+    {
+        "country": "Japan",
+        "extension": ".jp"
+    },
+    {
+        "country": "Kenya",
+        "extension": ".ke"
+    },
+    {
+        "country": "Kyrgyzstan",
+        "extension": ".kg"
+    },
+    {
+        "country": "Cambodia",
+        "extension": ".kh"
+    },
+    {
+        "country": "Kiribati",
+        "extension": ".ki"
+    },
+    {
+        "country": "Comoros Komori",
+        "extension": ".km"
+    },
+    {
+        "country": "Saint Kitts & Nevis",
+        "extension": ".kn"
+    },
+    {
+        "country": "Democratic People's Republic of Korea",
+        "extension": ".kp"
+    },
+    {
+        "country": "Republic of Korea",
+        "extension": ".kr"
+    },
+    {
+        "country": "Kuwait",
+        "extension": ".kw"
+    },
+    {
+        "country": "Cayman Islands",
+        "extension": ".ky"
+    },
+    {
+        "country": "Kazakhstan",
+        "extension": ".kz"
+    },
+    {
+        "country": "Laos",
+        "extension": ".la"
+    },
+    {
+        "country": "Lebanon",
+        "extension": ".lb"
+    },
+    {
+        "country": "Saint Lucia",
+        "extension": ".lc"
+    },
+    {
+        "country": "Liechtenstein",
+        "extension": ".li"
+    },
+    {
+        "country": "Sri Lanka",
+        "extension": ".lk"
+    },
+    {
+        "country": "Liberia",
+        "extension": ".lr"
+    },
+    {
+        "country": "Lesotho",
+        "extension": ".ls"
+    },
+    {
+        "country": "Lithuania",
+        "extension": ".lt"
+    },
+    {
+        "country": "Luxembourg",
+        "extension": ".lu"
+    },
+    {
+        "country": "Latvia",
+        "extension": ".lv"
+    },
+    {
+        "country": "Libya",
+        "extension": ".ly"
+    },
+    {
+        "country": "Morocco",
+        "extension": ".ma"
+    },
+    {
+        "country": "Monaco",
+        "extension": ".mc"
+    },
+    {
+        "country": "Moldova",
+        "extension": ".md"
+    },
+    {
+        "country": "Montenegro",
+        "extension": ".me"
+    },
+    {
+        "country": "Madagascar",
+        "extension": ".mg"
+    },
+    {
+        "country": "Marshall Islands",
+        "extension": ".mh"
+    },
+    {
+        "country": "Macedonia",
+        "extension": ".mk"
+    },
+    {
+        "country": "Mali",
+        "extension": ".ml"
+    },
+    {
+        "country": "Myanmar",
+        "extension": ".mm"
+    },
+    {
+        "country": "Mongolia",
+        "extension": ".mn"
+    },
+    {
+        "country": "Macau Macao",
+        "extension": ".mo"
+    },
+    {
+        "country": "Northern Mariana Islands Marianas Pacific",
+        "extension": ".mp"
+    },
+    {
+        "country": "Martinique",
+        "extension": ".mq"
+    },
+    {
+        "country": "Mauritania",
+        "extension": ".mr"
+    },
+    {
+        "country": "Montserrat",
+        "extension": ".ms"
+    },
+    {
+        "country": "Malta",
+        "extension": ".mt"
+    },
+    {
+        "country": "Mauritius",
+        "extension": ".mu"
+    },
+    {
+        "country": "Maldives",
+        "extension": ".mv"
+    },
+    {
+        "country": "Malawi",
+        "extension": ".mw"
+    },
+    {
+        "country": "Mexico",
+        "extension": ".mx"
+    },
+    {
+        "country": "Malaysia",
+        "extension": ".my"
+    },
+    {
+        "country": "Mozambique",
+        "extension": ".mz"
+    },
+    {
+        "country": "Namibia",
+        "extension": ".na"
+    },
+    {
+        "country": "New Caledonia",
+        "extension": ".nc"
+    },
+    {
+        "country": "Niger",
+        "extension": ".ne"
+    },
+    {
+        "country": "Norfolk Island",
+        "extension": ".nf"
+    },
+    {
+        "country": "Nigeria",
+        "extension": ".ng"
+    },
+    {
+        "country": "Nicaragua",
+        "extension": ".ni"
+    },
+    {
+        "country": "Netherlands",
+        "extension": ".nl"
+    },
+    {
+        "country": "Norway",
+        "extension": ".no"
+    },
+    {
+        "country": "Nepal",
+        "extension": ".np"
+    },
+    {
+        "country": "Nauru",
+        "extension": ".nr"
+    },
+    {
+        "country": "Niue",
+        "extension": ".nu"
+    },
+    {
+        "country": "New Zealand",
+        "extension": ".nz"
+    },
+    {
+        "country": "Oman",
+        "extension": ".om"
+    },
+    {
+        "country": "Panama",
+        "extension": ".pa"
+    },
+    {
+        "country": "Peru",
+        "extension": ".pe"
+    },
+    {
+        "country": "French Polynesia",
+        "extension": ".pf"
+    },
+    {
+        "country": "Papua New Guinea",
+        "extension": ".pg"
+    },
+    {
+        "country": "Philippines",
+        "extension": ".ph"
+    },
+    {
+        "country": "Pakistan",
+        "extension": ".pk"
+    },
+    {
+        "country": "Poland",
+        "extension": ".pl"
+    },
+    {
+        "country": "Saint-Pierre & Miquelon",
+        "extension": ".pm"
+    },
+    {
+        "country": "Pitcairn Islands",
+        "extension": ".pn"
+    },
+    {
+        "country": "Puerto Rico",
+        "extension": ".pr"
+    },
+    {
+        "country": "State of Palestine",
+        "extension": ".ps"
+    },
+    {
+        "country": "Portugal",
+        "extension": ".pt"
+    },
+    {
+        "country": "Palau Pelew",
+        "extension": ".pw"
+    },
+    {
+        "country": "Paraguay",
+        "extension": ".py"
+    },
+    {
+        "country": "Qatar",
+        "extension": ".qa"
+    },
+    {
+        "country": "Reunion",
+        "extension": ".re"
+    },
+    {
+        "country": "Romania",
+        "extension": ".ro"
+    },
+    {
+        "country": "Serbia",
+        "extension": ".rs"
+    },
+    {
+        "country": "Russia",
+        "extension": ".ru"
+    },
+    {
+        "country": "Rwanda",
+        "extension": ".rw"
+    },
+    {
+        "country": "Saudi Arabia",
+        "extension": ".sa"
+    },
+    {
+        "country": "Solomon Islands",
+        "extension": ".sb"
+    },
+    {
+        "country": "Seychelles",
+        "extension": ".sc"
+    },
+    {
+        "country": "Sudan",
+        "extension": ".sd"
+    },
+    {
+        "country": "Sweden",
+        "extension": ".se"
+    },
+    {
+        "country": "Singapore",
+        "extension": ".sg"
+    },
+    {
+        "country": "Saint Helena",
+        "extension": ".sh"
+    },
+    {
+        "country": "Slovenia",
+        "extension": ".si"
+    },
+    {
+        "country": "Svalbard & Jan Mayen Islands",
+        "extension": ".sj"
+    },
+    {
+        "country": "Slovakia",
+        "extension": ".sk"
+    },
+    {
+        "country": "Sierra Leone",
+        "extension": ".sl"
+    },
+    {
+        "country": "San Mari",
+        "extension": ".sm"
+    },
+    {
+        "country": "Senegal",
+        "extension": ".sn"
+    },
+    {
+        "country": "Somalia",
+        "extension": ".so"
+    },
+    {
+        "country": "Suriname",
+        "extension": ".sr"
+    },
+    {
+        "country": "South Sudan",
+        "extension": ".ss"
+    },
+    {
+        "country": "Sao Tome & Principe",
+        "extension": ".st"
+    },
+    {
+        "country": "Soviet Union",
+        "extension": ".su"
+    },
+    {
+        "country": "El Salvador",
+        "extension": ".sv"
+    },
+    {
+        "country": "Sint Maarten",
+        "extension": ".sx"
+    },
+    {
+        "country": "Syria",
+        "extension": ".sy"
+    },
+    {
+        "country": "Swaziland",
+        "extension": ".sz"
+    },
+    {
+        "country": "Turks & Caicos Islands",
+        "extension": ".tc"
+    },
+    {
+        "country": "Chad",
+        "extension": ".td"
+    },
+    {
+        "country": "French Southern & Antarctic Lands",
+        "extension": ".tf"
+    },
+    {
+        "country": "Togo",
+        "extension": ".tg"
+    },
+    {
+        "country": "Thailand",
+        "extension": ".th"
+    },
+    {
+        "country": "Tajikistan",
+        "extension": ".tj"
+    },
+    {
+        "country": "Tokelau",
+        "extension": ".tk"
+    },
+    {
+        "country": "East Timor",
+        "extension": ".tl"
+    },
+    {
+        "country": "Turkmenistan",
+        "extension": ".tm"
+    },
+    {
+        "country": "Tunisia",
+        "extension": ".tn"
+    },
+    {
+        "country": "Tonga",
+        "extension": ".to"
+    },
+    {
+        "country": "East Timor",
+        "extension": ".tp"
+    },
+    {
+        "country": "Turkey",
+        "extension": ".tr"
+    },
+    {
+        "country": "Trinidad & Tobago",
+        "extension": ".tt"
+    },
+    {
+        "country": "Tuvalu",
+        "extension": ".tv"
+    },
+    {
+        "country": "Taiwan",
+        "extension": ".tw"
+    },
+    {
+        "country": "Tanzania",
+        "extension": ".tz"
+    },
+    {
+        "country": "Ukraine",
+        "extension": ".ua"
+    },
+    {
+        "country": "Uganda",
+        "extension": ".ug"
+    },
+    {
+        "country": "United Kingdom",
+        "extension": ".uk"
+    },
+    {
+        "country": "United States of America",
+        "extension": ".us"
+    },
+    {
+        "country": "Uruguay",
+        "extension": ".uy"
+    },
+    {
+        "country": "Uzbekistan",
+        "extension": ".uz"
+    },
+    {
+        "country": "Vatican City",
+        "extension": ".va"
+    },
+    {
+        "country": "Saint Vincent & the Grenadines",
+        "extension": ".vc"
+    },
+    {
+        "country": "Venezuela",
+        "extension": ".ve"
+    },
+    {
+        "country": "British Virgin Islands",
+        "extension": ".vg"
+    },
+    {
+        "country": "United States Virgin Islands",
+        "extension": ".vi"
+    },
+    {
+        "country": "Vietnam",
+        "extension": ".vn"
+    },
+    {
+        "country": "Vanuatu",
+        "extension": ".vu"
+    },
+    {
+        "country": "Wallis & Futuna",
+        "extension": ".wf"
+    },
+    {
+        "country": "Samoa Western Samoa",
+        "extension": ".ws"
+    },
+    {
+        "country": "Yemen",
+        "extension": ".ye"
+    },
+    {
+        "country": "Mayotte",
+        "extension": ".yt"
+    },
+    {
+        "country": "SFR Yugoslaviaslavia",
+        "extension": ".yu"
+    },
+    {
+        "country": "South Africa",
+        "extension": ".za"
+    },
+    {
+        "country": "Zambia",
+        "extension": ".zm"
+    },
+    {
+        "country": "Zaire",
+        "extension": ".zr"
+    },
+    {
+        "country": "Zimbabwe",
+        "extension": ".zw"
+    }
+]
