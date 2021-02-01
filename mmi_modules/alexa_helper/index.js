@@ -17,7 +17,7 @@ class Alexa {
             try {
                 // let alexaUrl = 'http://www.alexa.com/siteinfo/'+this._fqdn
                 let alexaUrl = 'http://data.alexa.com/data?cli=10&dat=snbamz&url='+this._fqdn
-                $request.get(alexaUrl, async (err, resp, body)=>{
+                $request.get(alexaUrl, {timeout: 120000}, async (err, resp, body)=>{
                     if(err) reject(err);
                     else {
                         let $ = $cheerio.load(body, {decodeEntities:true, xmlMode:true})
@@ -126,7 +126,7 @@ class Alexa {
         const promise = new Promise(async(resolve, reject)=>{
             try {
                 let geolocationUrl = 'https://ipgeolocation.abstractapi.com/v1/?api_key=f4b61e710fd846c48350bd35faacfc51&ip_address='+await this.ip()
-                $request.get(geolocationUrl,{headers: {"Content-Type": "application/json", "Origin": "https://www.abstractapi.com", "Referer": "https://www.abstractapi.com/"}}, async (err, resp, body)=>{
+                $request.get(geolocationUrl,{headers: {"Content-Type": "application/json", "Origin": "https://www.abstractapi.com", "Referer": "https://www.abstractapi.com/"}, timeout: 120000}, async (err, resp, body)=>{
                     if(err){
                         reject(err)
                     }else{
