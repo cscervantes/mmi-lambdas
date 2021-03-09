@@ -63,7 +63,7 @@ class MediaValue {
                 if(wordcount === 1000){
                     wordcount = 1000
                 }
-                resolve(wordcount)
+                resolve({wordcount, textLength})
             } catch (error) {
                 reject(0)
             }
@@ -76,7 +76,7 @@ class MediaValue {
         const wordcount = await this.WordCount()
         const p = new Promise((resolve, reject)=>{
             try {
-                let advalue = wordcount * pubcost
+                let advalue = wordcount.wordcount * pubcost
                 resolve(advalue)
             } catch (error) {
                 reject(0)
@@ -547,22 +547,25 @@ module.exports = async function(globalRank, localRank, websiteCost, text, images
             const mediaValue = new MediaValue(globalRank, localRank, websiteCost, text, images, videos)
             const advalue = await mediaValue.AdValue()
             const prvalues = await mediaValue.PrValue()
-            const wordcount = await mediaValue.WordCount()
+            const wordcounts = await mediaValue.WordCount()
             const rank = await mediaValue.Rank()
             const pubcost = await mediaValue.Pubcost()
             const prvalue = prvalues.prvalue
             const modifier = prvalues.modifier
             const images_count = mediaValue._images.length
             const videos_count = mediaValue._videos.length
+            const modified_wordcount = wordcounts.wordcount
+            const original_wordcount = wordcounts.textLength
+            console.log('Original Word Count', original_wordcount)
             console.log('Rank', rank)
             console.log('Modifier', modifier)
-            console.log('Word Count', wordcount)
+            console.log('Word Count', modified_wordcount)
             console.log('Pubcost', pubcost)
             console.log('Images', images_count)
             console.log('Videos', videos_count)
             console.log('Ad Value', advalue)
             console.log('Pr Value', prvalue)
-            resolve({wordcount, pubcost, rank, images_count, videos_count, modifier, advalue, prvalue})
+            resolve({original_wordcount, modified_wordcount, pubcost, rank, images_count, videos_count, modifier, advalue, prvalue})
         } catch (error) {
             console.log(error)
             reject({
