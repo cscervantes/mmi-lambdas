@@ -206,7 +206,8 @@ class Crawler {
             }
             let q = {
                 "article_status": "Queued",
-                "article_source_from": article_source_from
+                "article_source_from": article_source_from,
+                "created_by": "System"
             }
             let queuedArticles = await fetch(source_enpoint+`article/custom_query?limit=${countQueued.data.result}&offset=${page_offset}`, 'POST', headers, q) 
             let mapArticles = _.shuffle(queuedArticles.data)
