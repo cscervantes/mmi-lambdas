@@ -200,7 +200,15 @@ class Crawler {
             console.log("###################################")   
             let article_source_from = "NodeJS Static Scraper"
             let countQueued = await fetch(source_enpoint+'article/count', 'POST', headers, {article_status: "Queued"})
-            let queuedArticles = await fetch(source_enpoint+`article?article_status=Queued&article_source_from=${article_source_from}&limit=${countQueued.data.result}`, 'GET', headers) 
+            console.log('Count',countQueued)
+            if(countQueued.data.result > 10000){
+                countQueued.data.result = page_size
+            }
+            let q = {
+                "article_status": "Queued",
+                "article_source_from": article_source_from
+            }
+            let queuedArticles = await fetch(source_enpoint+`article/custom_query?limit=${countQueued.data.result}&offset=${page_offset}`, 'POST', headers, q) 
             let mapArticles = _.shuffle(queuedArticles.data)
 
             console.log('Total Queued',mapArticles.length)
@@ -981,11 +989,12 @@ async function processArticle(website, section, fqdn, articleLinks) {
                         let article_source_url = fqdn
                         let article_url = d.data.article_url
                         let article_status = "Queued"
+                        let article_source_from = "NodeJS Static Scraper"
                         let date_created = new Date()
                         let date_updated = new Date()
                         fetch(source_enpoint+'article', 'POST', headers, {
                             website, section, article_source_url,
-                            article_url, article_status, date_created, date_updated
+                            article_url, article_status, article_source_from, date_created, date_updated
                         }).then(console.log).catch(console.error)
                     }
                 })
