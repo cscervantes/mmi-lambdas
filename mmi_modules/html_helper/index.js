@@ -110,8 +110,13 @@ HtmlHelper.prototype.SECTION_LINKS = async function() {
                 }
                 let vUrl = _u.href
                 vUrl = (this._includeSearch) ? vUrl  : new URL(vUrl).origin+new URL(vUrl).pathname
-                vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
-                vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+                
+                // vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
+                vUrl = vUrl.replace(/^(https\:)/g, 'http:')
+                
+                // vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+                vUrl = vUrl.replace(/\/$/g, '')
+                
                 return (vUrl.indexOf('%') != -1) ? decodeURI(vUrl) : encodeURI(vUrl)
             })
             resolve(Array.from(new Set(filteredSections)))
@@ -152,8 +157,13 @@ HtmlHelper.prototype.ARTICLE_LINKS = async function() {
                 }
                 let vUrl = _u.href
                 vUrl = (this._includeSearch) ? vUrl  : new URL(vUrl).origin+new URL(vUrl).pathname
-                vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
-                vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+                
+                // vUrl = (this._startWithHttps) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
+                vUrl = vUrl.replace(/^(https\:)/g, 'http:')
+                
+                // vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+                vUrl = vUrl.replace(/\/$/g, '')
+                
                 return (vUrl.indexOf('%') != -1) ? decodeURI(vUrl) : encodeURI(vUrl)
             })
             resolve(Array.from(new Set(filteredSections)))

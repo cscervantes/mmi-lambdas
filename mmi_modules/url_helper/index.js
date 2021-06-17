@@ -17,8 +17,12 @@ UrlHelper.prototype.FORMATTED_URL = async function() {
     }
     let vUrl = _u.href
     vUrl = (this._includeSearch) ? vUrl  : new URL(vUrl).origin+new URL(vUrl).pathname
-    vUrl = (this._startWithHttp) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
-    vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+    
+    // vUrl = (this._startWithHttp) ? vUrl.replace(/^(http\:)/g, 'https:') : vUrl.replace(/^(https\:)/g, 'http:')
+    vUrl = vUrl.replace(/^(https\:)/g, 'http:')
+    
+    // vUrl = (this._endsWithSlash) ? (vUrl.substr(-1) != '/') ? vUrl+'/' : vUrl : vUrl.replace(/\/$/g, '')
+    vUrl = vUrl.replace(/\/$/g, '')
     return encodeURI(vUrl)
 }
 
