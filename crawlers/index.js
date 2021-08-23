@@ -42,8 +42,9 @@ class Crawler {
                 v.main_sections.forEach(element => {
                     let website = v._id
                     let section_url = element
+                    let fqdn = v.fqdn
                     websites.push({
-                        website, section_url
+                        website, section_url, fqdn
                     })
                 })
                 return websites
